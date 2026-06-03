@@ -83,5 +83,6 @@ char        *file_read(const char *path);
 int         logger_init(const char *path);
 void        logger_close(void);
 void        logger_event(const char *event, t_session *session);
+t_grade     validator_grade(t_exercise *ex);
 
 #endif

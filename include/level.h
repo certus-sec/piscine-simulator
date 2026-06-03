@@ -18,5 +18,6 @@ void        level_destroy(t_level *lvl);
 int         level_load_exercises(t_level *lvl, const char *exam_path);
 t_exercise  *level_pick_random_exercise(t_level *lvl);
 int         level_has_available(const t_level *lvl);
+void    level_free(t_level *lvl);
 
 #endif

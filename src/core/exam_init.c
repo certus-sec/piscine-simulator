@@ -2,6 +2,7 @@
 #include "config.h"
 #include "utils.h"
 #include <stdio.h>
+#include <string.h>
 
 static char *build_exam_path(const char *data_dir, int exam_id)
 {
@@ -35,12 +36,13 @@ static int exam_load_levels(t_exam *exam)
         }
         if (level_load_exercises(lvl, exam_path) < 0)
         {
-            level_destroy(lvl);
+            level_free(lvl);
             xfree((void **)&exam_path);
             return -1;
         }
         exam->levels[i] = *lvl;
-        xfree(&lvl);
+        memset(lvl->exercises, 0, sizeof(lvl->exercises));
+        level_free(lvl);
     }
     xfree((void **)&exam_path);
     return 0;

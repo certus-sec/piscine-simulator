@@ -26,7 +26,6 @@ void level_destroy(t_level *lvl)
         return;
     for (i = 0; i < EXERCISES_PER_LEVEL; i++)
         exercise_destroy(&lvl->exercises[i]);
-    xfree((void **)&lvl);
 }
 
 t_exercise *level_pick_random_exercise(t_level *lvl)
@@ -46,4 +45,11 @@ t_exercise *level_pick_random_exercise(t_level *lvl)
 int level_has_available(const t_level *lvl)
 {
     return lvl->available_count > 0;
+}
+void level_free(t_level *lvl)
+{
+    if (!lvl)
+        return;
+    level_destroy(lvl);
+    xfree((void **)&lvl);
 }
