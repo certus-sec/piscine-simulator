@@ -15,21 +15,19 @@
 #define SCORE_EXAM00_02_LAST    16
 #define SCORE_EXAM03_NORMAL     6
 #define SCORE_EXAM03_LAST       10
-
-/* ========== Exam Durations (seconds) ========== */
-#define EXAM00_02_DURATION      14400   /* 4 hours */
-#define EXAM03_DURATION         28800   /* 8 hours */
+#define EXAM00_02_DURATION      14400 
+#define EXAM03_DURATION         28800 
 
 typedef struct s_exam_config {
     int     exam_id;
     int     level_count;
     int     normal_points;
     int     last_points;
-    int     duration_seconds;   /* ← جديد */
+    int     duration_seconds; 
 } t_exam_config;
 
 const t_exam_config *config_get_exam(int exam_id);
 int config_get_level_points(int exam_id, int level_num);
-int config_get_exam_duration(int exam_id);   /* ← جديد */
+int config_get_exam_duration(int exam_id); 
 
 #endif

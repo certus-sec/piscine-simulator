@@ -4,14 +4,11 @@
 #include <time.h>
 #include "exam.h"
 #include "utils.h"
-
-/* ========== Grade ========== */
 typedef enum e_grade {
     GRADE_FAIL = 0,
     GRADE_PASS = 1
 } t_grade;
 
-/* ========== Session State ========== */
 typedef enum e_session_state {
     SESSION_INIT,
     SESSION_EXAM_IN_PROGRESS,
@@ -21,7 +18,6 @@ typedef enum e_session_state {
     SESSION_ALL_PASSED
 } t_session_state;
 
-/* ========== Session ========== */
 typedef struct s_session {
     t_exam          *exam;
     int             total_score;
@@ -32,7 +28,6 @@ typedef struct s_session {
     int             time_remaining;
 } t_session;
 
-/* ========== Engine ========== */
 t_session   *session_new(void);
 void        session_destroy(t_session *session);
 int         session_start_exam(t_session *session, int exam_id);
@@ -50,7 +45,6 @@ int         score_engine_has_reached_target(const t_session *session);
 void        runner_start(t_session *session, int start_exam);
 int         random_picker_pick_unused(t_level *lvl);
 
-/* ========== UI ========== */
 void        display_clear(void);
 void        display_exercise(t_exercise *ex);
 void        display_level_info(t_level *lvl);
@@ -74,7 +68,6 @@ int         menu_main(void);
 int         menu_pause(void);
 int         menu_confirm_submit(void);
 
-/* ========== IO ========== */
 char        *input_read_line(void);
 int         input_read_int(void);
 int         input_read_confirm(void);
