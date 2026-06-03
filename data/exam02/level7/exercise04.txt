@@ -1,0 +1,11 @@
+Assignment name  : full_parser
+Expected files   : full_parser.c
+Allowed functions: write, malloc, free
+
+[Expert exercise - subject to be detailed]
+
+Write your solution in a file named full_parser.c
+
+Example:
+$> ./full_parser | cat -e
+$

@@ -1,0 +1,11 @@
+Assignment name  : system_challenge
+Expected files   : system_challenge.c
+Allowed functions: write, malloc, free
+
+[Expert exercise - subject to be detailed]
+
+Write your solution in a file named system_challenge.c
+
+Example:
+$> ./system_challenge | cat -e
+$

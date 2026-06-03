@@ -1,0 +1,11 @@
+Assignment name  : string_master
+Expected files   : string_master.c
+Allowed functions: write, malloc, free
+
+[Advanced exercise - subject to be detailed]
+
+Write your solution in a file named string_master.c
+
+Example:
+$> ./string_master | cat -e
+$

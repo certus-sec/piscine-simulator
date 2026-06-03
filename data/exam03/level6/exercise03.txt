@@ -1,0 +1,13 @@
+Assignment name  : pointer_arithmetic
+Expected files   : pointer_arithmetic.c
+Allowed functions: write
+
+Write a program that takes a string and performs various pointer arithmetic operations: find middle char, find last char, reverse using only pointers. Display results separated by spaces, followed by a newline.
+
+If the number of arguments is not 1, display a newline.
+
+Example:
+$> ./pointer_arithmetic "abcdef"
+c f fedcba
+$> ./pointer_arithmetic | cat -e
+$

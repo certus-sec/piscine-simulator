@@ -1,0 +1,13 @@
+Assignment name  : runtime_engine
+Expected files   : runtime_engine.c
+Allowed functions: write, gettimeofday
+
+Write a program that measures the execution time of a simple loop (iterations passed as argument). Display the time in microseconds followed by a newline.
+
+If the number of arguments is not 1, display a newline.
+
+Example:
+$> ./runtime_engine 1000000
+42
+$> ./runtime_engine | cat -e
+$

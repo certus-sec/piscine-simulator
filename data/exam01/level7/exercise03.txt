@@ -1,0 +1,11 @@
+Assignment name  : memory_challenge
+Expected files   : memory_challenge.c
+Allowed functions: write, malloc, free
+
+[Advanced exercise - subject to be detailed]
+
+Write your solution in a file named memory_challenge.c
+
+Example:
+$> ./memory_challenge | cat -e
+$

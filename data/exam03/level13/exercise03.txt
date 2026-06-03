@@ -1,0 +1,11 @@
+Assignment name  : logic_overflow
+Expected files   : logic_overflow.c
+Allowed functions: write, malloc, free
+
+[Level 13 challenge - subject to be detailed]
+
+Write your solution in a file named logic_overflow.c
+
+Example:
+$> ./logic_overflow | cat -e
+$

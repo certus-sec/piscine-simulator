@@ -1,0 +1,17 @@
+Assignment name  : memory_engine
+Expected files   : memory_engine.c
+Allowed functions: malloc, free, write
+
+Write a program that implements a simple memory allocator. It should manage a fixed-size pool and support allocate and free operations.
+
+Arguments: operation (alloc/free) and size/index. Display the result or "error" followed by a newline.
+
+Example:
+$> ./memory_engine alloc 10
+0
+$> ./memory_engine alloc 20
+1
+$> ./memory_engine free 0
+ok
+$> ./memory_engine | cat -e
+$

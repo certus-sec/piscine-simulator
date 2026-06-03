@@ -1,0 +1,13 @@
+Assignment name  : array_manipulation
+Expected files   : array_manipulation.c
+Allowed functions: write, malloc, free
+
+Write a program that takes a list of integers and removes all duplicates, keeping only the first occurrence of each. Display the result separated by spaces, followed by a newline.
+
+If the number of arguments is less than 1, display a newline.
+
+Example:
+$> ./array_manipulation 1 2 3 2 4 3 5
+1 2 3 4 5
+$> ./array_manipulation | cat -e
+$

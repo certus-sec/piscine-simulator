@@ -1,0 +1,14 @@
+Assignment name  : aff_first_param
+Expected files   : aff_first_param.c
+Allowed functions: write
+
+Write a program that takes strings as arguments, and displays its first
+argument followed by a newline.
+
+If the number of arguments is less than 1, the program displays a newline.
+
+Example:
+$> ./aff_first_param it is at this moment that it is a test | cat -e
+it$
+$> ./aff_first_param | cat -e
+$

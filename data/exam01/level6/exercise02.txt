@@ -1,0 +1,17 @@
+Assignment name  : string_challenge
+Expected files   : string_challenge.c
+Allowed functions: write, malloc, free
+
+Write a program that takes a string and returns the longest substring without repeating characters.
+
+If the number of arguments is not 1, display a newline.
+
+Example:
+$> ./string_challenge "abcabcbb"
+abc
+$> ./string_challenge "bbbbb"
+b
+$> ./string_challenge "pwwkew"
+wke
+$> ./string_challenge | cat -e
+$

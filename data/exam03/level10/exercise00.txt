@@ -1,0 +1,11 @@
+Assignment name  : kernel_level_logic
+Expected files   : kernel_level_logic.c
+Allowed functions: write, malloc, free
+
+[Level 10 challenge - subject to be detailed]
+
+Write your solution in a file named kernel_level_logic.c
+
+Example:
+$> ./kernel_level_logic | cat -e
+$

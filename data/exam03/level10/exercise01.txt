@@ -1,0 +1,11 @@
+Assignment name  : performance_test
+Expected files   : performance_test.c
+Allowed functions: write, malloc, free
+
+[Level 10 challenge - subject to be detailed]
+
+Write your solution in a file named performance_test.c
+
+Example:
+$> ./performance_test | cat -e
+$

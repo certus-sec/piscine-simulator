@@ -1,0 +1,11 @@
+Assignment name  : piscine_mastery
+Expected files   : piscine_mastery.c
+Allowed functions: write, malloc, free
+
+[Level 15 challenge - subject to be detailed]
+
+Write your solution in a file named piscine_mastery.c
+
+Example:
+$> ./piscine_mastery | cat -e
+$

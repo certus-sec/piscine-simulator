@@ -1,0 +1,13 @@
+Assignment name  : sorting_advanced
+Expected files   : sorting_advanced.c
+Allowed functions: write, malloc, free
+
+Write a program that takes a list of integers and sorts them using merge sort. Display the sorted list separated by spaces, followed by a newline.
+
+If the number of arguments is less than 1, display a newline.
+
+Example:
+$> ./sorting_advanced 5 2 8 1 9
+1 2 5 8 9
+$> ./sorting_advanced | cat -e
+$

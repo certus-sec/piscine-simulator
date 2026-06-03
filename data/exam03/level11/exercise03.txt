@@ -1,0 +1,11 @@
+Assignment name  : complexity_test
+Expected files   : complexity_test.c
+Allowed functions: write, malloc, free
+
+[Level 11 challenge - subject to be detailed]
+
+Write your solution in a file named complexity_test.c
+
+Example:
+$> ./complexity_test | cat -e
+$

@@ -1,0 +1,11 @@
+Assignment name  : parsing_master
+Expected files   : parsing_master.c
+Allowed functions: write, malloc, free
+
+[Advanced exercise - subject to be detailed]
+
+Write your solution in a file named parsing_master.c
+
+Example:
+$> ./parsing_master | cat -e
+$

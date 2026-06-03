@@ -1,0 +1,14 @@
+Assignment name  : system_core
+Expected files   : system_core.c
+Allowed functions: write, fork, execve, wait
+
+Write a program that executes a command with arguments using fork and execve. The command and its arguments are passed as parameters to your program. Display the exit status of the child process followed by a newline.
+
+If the number of arguments is less than 1, display a newline.
+
+Example:
+$> ./system_core /bin/echo hello world
+0
+hello world
+$> ./system_core | cat -e
+$

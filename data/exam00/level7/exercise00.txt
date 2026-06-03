@@ -1,0 +1,11 @@
+Assignment name  : advanced_mix_1
+Expected files   : advanced_mix_1.c
+Allowed functions: write, malloc, free
+
+[Advanced exercise - subject to be detailed]
+
+Write your solution in a file named advanced_mix_1.c
+
+Example:
+$> ./advanced_mix_1 | cat -e
+$

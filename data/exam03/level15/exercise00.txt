@@ -1,0 +1,11 @@
+Assignment name  : ultimate_exam_1
+Expected files   : ultimate_exam_1.c
+Allowed functions: write, malloc, free
+
+[Level 15 challenge - subject to be detailed]
+
+Write your solution in a file named ultimate_exam_1.c
+
+Example:
+$> ./ultimate_exam_1 | cat -e
+$

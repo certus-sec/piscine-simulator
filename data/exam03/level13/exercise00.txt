@@ -1,0 +1,11 @@
+Assignment name  : elite_challenge_1
+Expected files   : elite_challenge_1.c
+Allowed functions: write, malloc, free
+
+[Level 13 challenge - subject to be detailed]
+
+Write your solution in a file named elite_challenge_1.c
+
+Example:
+$> ./elite_challenge_1 | cat -e
+$

@@ -1,0 +1,11 @@
+Assignment name  : extreme_edge_cases
+Expected files   : extreme_edge_cases.c
+Allowed functions: write, malloc, free
+
+[Level 14 challenge - subject to be detailed]
+
+Write your solution in a file named extreme_edge_cases.c
+
+Example:
+$> ./extreme_edge_cases | cat -e
+$

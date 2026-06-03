@@ -1,0 +1,11 @@
+Assignment name  : master_engine_1
+Expected files   : master_engine_1.c
+Allowed functions: write, malloc, free
+
+[Level 14 challenge - subject to be detailed]
+
+Write your solution in a file named master_engine_1.c
+
+Example:
+$> ./master_engine_1 | cat -e
+$

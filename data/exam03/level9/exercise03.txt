@@ -1,0 +1,11 @@
+Assignment name  : algorithm_deep
+Expected files   : algorithm_deep.c
+Allowed functions: write, malloc, free
+
+[Level 9 challenge - subject to be detailed]
+
+Write your solution in a file named algorithm_deep.c
+
+Example:
+$> ./algorithm_deep | cat -e
+$

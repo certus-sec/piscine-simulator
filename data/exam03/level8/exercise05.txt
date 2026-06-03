@@ -1,0 +1,11 @@
+Assignment name  : master_level
+Expected files   : master_level.c
+Allowed functions: write, malloc, free
+
+[Level 8 challenge - subject to be detailed]
+
+Write your solution in a file named master_level.c
+
+Example:
+$> ./master_level | cat -e
+$

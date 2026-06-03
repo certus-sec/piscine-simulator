@@ -1,0 +1,11 @@
+Assignment name  : full_system_test
+Expected files   : full_system_test.c
+Allowed functions: write, malloc, free
+
+[Level 8 challenge - subject to be detailed]
+
+Write your solution in a file named full_system_test.c
+
+Example:
+$> ./full_system_test | cat -e
+$

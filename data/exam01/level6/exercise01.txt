@@ -1,0 +1,15 @@
+Assignment name  : parsing_basic
+Expected files   : parsing_basic.c
+Allowed functions: write, malloc, free
+
+Write a program that takes a string and extracts all integers from it, displaying them one per line in the order they appear.
+
+If the number of arguments is not 1, display a newline.
+
+Example:
+$> ./parsing_basic "abc123def45.6gh7"
+123
+45
+7
+$> ./parsing_basic | cat -e
+$

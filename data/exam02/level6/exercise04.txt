@@ -1,0 +1,13 @@
+Assignment name  : data_structures
+Expected files   : data_structures.c
+Allowed functions: malloc, free, write
+
+Write a program that implements a stack with push and pop operations. Take integers as arguments, push them all, then pop and print them all separated by spaces, followed by a newline.
+
+If the number of arguments is less than 1, display a newline.
+
+Example:
+$> ./data_structures 1 2 3 4 5
+5 4 3 2 1
+$> ./data_structures | cat -e
+$
