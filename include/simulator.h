@@ -48,6 +48,7 @@ int         score_engine_get_total(const t_session *session);
 int         score_engine_has_reached_target(const t_session *session);
 
 void        runner_start(t_session *session, int start_exam);
+int         random_picker_pick_unused(t_level *lvl);
 
 /* ========== UI ========== */
 void        display_clear(void);

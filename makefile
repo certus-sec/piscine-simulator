@@ -34,6 +34,7 @@ SRCS = $(SRC_DIR)/main.c \
        $(SRC_DIR)/utils/time.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+TEST_OBJS = $(filter-out $(BUILD_DIR)/main.o,$(OBJS))
 
 all: $(NAME)
 
@@ -57,9 +58,9 @@ run: $(NAME)
 	./$(NAME)
 
 test: $(NAME)
-	$(CC) $(CFLAGS) tests/test_score.c $(OBJS) -o test_score
-	$(CC) $(CFLAGS) tests/test_levels.c $(OBJS) -o test_levels
-	$(CC) $(CFLAGS) tests/test_engine.c $(OBJS) -o test_engine
+	$(CC) $(CFLAGS) tests/test_score.c $(TEST_OBJS) -o test_score
+	$(CC) $(CFLAGS) tests/test_levels.c $(TEST_OBJS) -o test_levels
+	$(CC) $(CFLAGS) tests/test_engine.c $(TEST_OBJS) -o test_engine
 	./test_score
 	./test_levels
 	./test_engine

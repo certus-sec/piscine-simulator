@@ -36,16 +36,16 @@ static void test_session_lifecycle(void)
     printf("[PASS] session lifecycle\n");
 }
 
-static void test_session_start_fails_without_data(void)
+static void test_session_start_rejects_invalid_exam(void)
 {
     t_session *s = session_new();
-    int ret = session_start_exam(s, 0);
+    int ret = session_start_exam(s, -1);
 
     assert(ret == -1);
     assert(s->exam == NULL);
 
     session_destroy(s);
-    printf("[PASS] session start fails without data\n");
+    printf("[PASS] session start rejects invalid exam\n");
 }
 
 static void test_exam03_config(void)
@@ -63,7 +63,7 @@ int main(void)
     printf("=== test_engine ===\n");
     test_exam_lifecycle();
     test_session_lifecycle();
-    test_session_start_fails_without_data();
+    test_session_start_rejects_invalid_exam();
     test_exam03_config();
     printf("All engine tests passed.\n");
     return 0;
