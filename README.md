@@ -32,8 +32,7 @@ Terminal-based exam simulator built in pure C.
 
 Piscine Simulator replicates the authentic 1337 / 42 Piscine exam environment, allowing students to practice under realistic conditions.
 
-```mermaid
-flowchart LR
+```bash
 Exam00 --> Exam01
 Exam01 --> Exam02
 Exam02 --> Exam03
