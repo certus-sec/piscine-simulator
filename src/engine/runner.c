@@ -227,28 +227,29 @@ static int safe_mkdir(const char *path)
     return mkdir(path, 0755);
 }
 
-static void run_test_case(const char *binary_path, const char *input, 
-                         const char *expected, const char *description,
+static void run_test_case(const char *binary_path, const char *args,
+                         const char *input, const char *expected,
+                         const char *description,
                          char *output_buffer, size_t buffer_size, int *passed)
 {
     FILE *fp;
-    char cmd[512];
+    char cmd[1024];
     char result[512];
-    char buffer[1024];
+    char buffer[512];
     int remaining;
 
     if (!binary_path || !expected || !description || !output_buffer || !passed)
         return;
 
     if (input && strlen(input) > 0)
-        snprintf(cmd, sizeof(cmd), "echo -n '%s' | %s 2>&1", input, binary_path);
+        snprintf(cmd, sizeof(cmd), "printf '%%s' '%s' | %s %s 2>&1", input, binary_path, args ? args : "");
     else
-        snprintf(cmd, sizeof(cmd), "%s 2>&1", binary_path);
-    
+        snprintf(cmd, sizeof(cmd), "%s %s 2>&1", binary_path, args ? args : "");
+
     fp = popen(cmd, "r");
     if (!fp)
     {
-        snprintf(buffer, sizeof(buffer), RED "✗ FAIL" RESET ": %s (exec)", description);
+        snprintf(buffer, sizeof(buffer), RED "✗ FAIL" RESET ": %s (exec error)\n", description);
         remaining = buffer_size - strlen(output_buffer) - 1;
         if (remaining > 0)
             strncat(output_buffer, buffer, remaining);
@@ -256,42 +257,323 @@ static void run_test_case(const char *binary_path, const char *input,
     }
 
     memset(result, 0, sizeof(result));
-    if (fgets(result, sizeof(result), fp))
-    {
-        result[strcspn(result, "\n")] = '\0';
+    fread(result, 1, sizeof(result) - 1, fp);
+    pclose(fp);
 
-        if (strcmp(result, expected) == 0)
-        {
-            snprintf(buffer, sizeof(buffer), 
-                GREEN "✓ PASS" RESET ": %s\n", description);
-            (*passed)++;
-        }
-        else
-        {
-            snprintf(buffer, sizeof(buffer),
-                RED "✗ FAIL" RESET ": %s\n  Expected: '%s'\n  Got: '%s'\n",
-                description, expected, result);
-        }
+    result[strcspn(result, "\n")] = '\0';
+
+    if (strcmp(result, expected) == 0)
+    {
+        snprintf(buffer, sizeof(buffer), GREEN "✓ PASS" RESET ": %s\n", description);
+        (*passed)++;
     }
     else
     {
-        snprintf(buffer, sizeof(buffer),
-            RED "✗ FAIL" RESET ": %s (no output)\n", description);
+        snprintf(buffer, sizeof(buffer), RED "✗ FAIL" RESET ": %s", description);
+        strncat(buffer, "\n  Expected: '", sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, expected, sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, "'\n  Got:      '", sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, result, sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, "'\n", sizeof(buffer) - strlen(buffer) - 1);
     }
 
-    pclose(fp);
-    
     remaining = buffer_size - strlen(output_buffer) - 1;
     if (remaining > 0)
         strncat(output_buffer, buffer, remaining);
 }
+
+static void run_test_case_multiline(const char *binary_path, const char *args,
+                                    const char *expected_full,
+                                    const char *description,
+                                    char *output_buffer, size_t buffer_size, int *passed)
+{
+    FILE *fp;
+    char cmd[1024];
+    char result[512];
+    char buffer[512];
+    int remaining;
+    size_t len;
+
+    if (!binary_path || !expected_full || !description || !output_buffer || !passed)
+        return;
+
+    snprintf(cmd, sizeof(cmd), "%s %s 2>&1", binary_path, args ? args : "");
+
+    fp = popen(cmd, "r");
+    if (!fp)
+    {
+        snprintf(buffer, sizeof(buffer), RED "✗ FAIL" RESET ": %s (exec error)\n", description);
+        remaining = buffer_size - strlen(output_buffer) - 1;
+        if (remaining > 0)
+            strncat(output_buffer, buffer, remaining);
+        return;
+    }
+
+    memset(result, 0, sizeof(result));
+    fread(result, 1, sizeof(result) - 1, fp);
+    pclose(fp);
+
+    len = strlen(result);
+    if (len > 0 && result[len - 1] == '\n')
+        result[len - 1] = '\0';
+
+    if (strcmp(result, expected_full) == 0)
+    {
+        snprintf(buffer, sizeof(buffer), GREEN "✓ PASS" RESET ": %s\n", description);
+        (*passed)++;
+    }
+    else
+    {
+        snprintf(buffer, sizeof(buffer),
+            RED "✗ FAIL" RESET ": %s", description);
+        strncat(buffer, "\n  Expected: '", sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, expected_full, sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, "'\n  Got:      '", sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, result, sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, "'\n", sizeof(buffer) - strlen(buffer) - 1);
+    }
+
+    remaining = buffer_size - strlen(output_buffer) - 1;
+    if (remaining > 0)
+        strncat(output_buffer, buffer, remaining);
+}
+
+static int compile_with_main(const char *rendu_dir, const char *binary,
+                              const char *ex_name)
+{
+    char compile_cmd[512];
+
+    snprintf(compile_cmd, sizeof(compile_cmd),
+        "cc -Wall -Wextra -Werror %s/*.c -o %s 2>./trace/%s_molinette.log",
+        rendu_dir, binary, ex_name);
+    return system(compile_cmd);
+}
+
+static void write_test_main(const char *ex_name, const char *rendu_dir,
+                             const char *binary, char *test_output,
+                             size_t out_size, int *passed, int *total)
+{
+    char main_path[256];
+    FILE *f;
+
+    snprintf(main_path, sizeof(main_path), "%s/main_test.c", rendu_dir);
+
+    if (strcmp(ex_name, "ft_putstr") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <unistd.h>\n"
+            "void ft_putstr(char *str);\n"
+            "int main(void) {\n"
+            "    ft_putstr(\"Hello\");\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case(binary, "", "", "Hello",
+                "ft_putstr(\"Hello\") outputs 'Hello'",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_strlen") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "int ft_strlen(char *str);\n"
+            "int main(void) {\n"
+            "    printf(\"%%d\\n\", ft_strlen(\"Hello\"));\n"
+            "    printf(\"%%d\\n\", ft_strlen(\"\"));\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case_multiline(binary, "", "5\n0",
+                "ft_strlen(\"Hello\")==5, ft_strlen(\"\")==0",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_swap") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "void ft_swap(int *a, int *b);\n"
+            "int main(void) {\n"
+            "    int a = 1, b = 2;\n"
+            "    ft_swap(&a, &b);\n"
+            "    printf(\"%%d %%d\\n\", a, b);\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case(binary, "", "", "2 1",
+                "ft_swap(1,2) -> a=2 b=1",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_atoi") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "int ft_atoi(const char *nptr);\n"
+            "int main(void) {\n"
+            "    printf(\"%%d\\n\", ft_atoi(\"42\"));\n"
+            "    printf(\"%%d\\n\", ft_atoi(\"-7\"));\n"
+            "    printf(\"%%d\\n\", ft_atoi(\"0\"));\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case_multiline(binary, "", "42\n-7\n0",
+                "ft_atoi: 42, -7, 0",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_strcmp") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "int ft_strcmp(char *s1, char *s2);\n"
+            "int main(void) {\n"
+            "    int r1 = ft_strcmp(\"abc\", \"abc\");\n"
+            "    int r2 = ft_strcmp(\"abc\", \"abd\");\n"
+            "    int r3 = ft_strcmp(\"abd\", \"abc\");\n"
+            "    printf(\"%%d\\n\", r1 == 0 ? 0 : (r1 < 0 ? -1 : 1));\n"
+            "    printf(\"%%d\\n\", r2 == 0 ? 0 : (r2 < 0 ? -1 : 1));\n"
+            "    printf(\"%%d\\n\", r3 == 0 ? 0 : (r3 < 0 ? -1 : 1));\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case_multiline(binary, "", "0\n-1\n1",
+                "ft_strcmp: equal=0, less=-1, greater=1",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_strcpy") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "char *ft_strcpy(char *dest, char *src);\n"
+            "int main(void) {\n"
+            "    char buf[64];\n"
+            "    ft_strcpy(buf, \"Hello\");\n"
+            "    printf(\"%%s\\n\", buf);\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case(binary, "", "", "Hello",
+                "ft_strcpy copies 'Hello' correctly",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "max") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "int max(int *tab, unsigned int len);\n"
+            "int main(void) {\n"
+            "    int t1[] = {3, 1, 4, 1, 5, 9, 2};\n"
+            "    int t2[] = {-1, -5, -2};\n"
+            "    printf(\"%%d\\n\", max(t1, 7));\n"
+            "    printf(\"%%d\\n\", max(t2, 3));\n"
+            "    printf(\"%%d\\n\", max(t1, 0));\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case_multiline(binary, "", "9\n-1\n0",
+                "max: {3,1,4,1,5,9,2}=9, negatives=-1, empty=0",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_itoa") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "#include <stdlib.h>\n"
+            "char *ft_itoa(int nbr);\n"
+            "int main(void) {\n"
+            "    char *s;\n"
+            "    s = ft_itoa(42);   printf(\"%%s\\n\", s); free(s);\n"
+            "    s = ft_itoa(-7);   printf(\"%%s\\n\", s); free(s);\n"
+            "    s = ft_itoa(0);    printf(\"%%s\\n\", s); free(s);\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case_multiline(binary, "", "42\n-7\n0",
+                "ft_itoa: 42, -7, 0",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_strdup") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "#include <stdlib.h>\n"
+            "char *ft_strdup(char *src);\n"
+            "int main(void) {\n"
+            "    char *s = ft_strdup(\"Hello\");\n"
+            "    printf(\"%%s\\n\", s);\n"
+            "    free(s);\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case(binary, "", "", "Hello",
+                "ft_strdup(\"Hello\") returns 'Hello'",
+                test_output, out_size, passed);
+    }
+    else if (strcmp(ex_name, "ft_strrev") == 0)
+    {
+        f = fopen(main_path, "w");
+        if (!f) return;
+        fprintf(f,
+            "#include <stdio.h>\n"
+            "char *ft_strrev(char *str);\n"
+            "int main(void) {\n"
+            "    char s1[] = \"Hello\";\n"
+            "    char s2[] = \"\";\n"
+            "    printf(\"%%s\\n\", ft_strrev(s1));\n"
+            "    printf(\"%%s\\n\", ft_strrev(s2));\n"
+            "    return 0;\n"
+            "}\n");
+        fclose(f);
+        *total = 1;
+        if (compile_with_main(rendu_dir, binary, ex_name) == 0)
+            run_test_case_multiline(binary, "", "olleH\n",
+                "ft_strrev(\"Hello\")==\"olleH\", ft_strrev(\"\")==\"\"",
+                test_output, out_size, passed);
+    }
+    remove(main_path);
+}
+
 
 static int run_grading(const char *ex_name)
 {
     t_grader_result *result;
     char rendu_dir[128];
     char compile_cmd[512];
-    char test_output[2048];
+    char test_output[4096];
     char binary[128];
     int passed_tests = 0;
     int total_tests = 0;
@@ -307,15 +589,41 @@ static int run_grading(const char *ex_name)
     if (!result)
         return (-1);
 
-    snprintf(compile_cmd, sizeof(compile_cmd), 
-        "cc -Wall -Wextra -Werror %s/*.c -o %s 2>/dev/null",
-        rendu_dir, binary);
-    
+    snprintf(compile_cmd, sizeof(compile_cmd),
+        "cc -Wall -Wextra -Werror %s/*.c -o %s 2>./trace/%s_molinette.log",
+        rendu_dir, binary, ex_name);
+
     if (system(compile_cmd) != 0)
     {
+        FILE *log_fp;
+        char log_path[256];
+        char err_buf[2048];
+        FILE *err_fp;
+
+        snprintf(log_path, sizeof(log_path), "./trace/%s_molinette.log", ex_name);
+
+        err_fp = fopen(log_path, "r");
+        memset(err_buf, 0, sizeof(err_buf));
+        if (err_fp)
+        {
+            fread(err_buf, 1, sizeof(err_buf) - 1, err_fp);
+            fclose(err_fp);
+        }
+
+        log_fp = fopen(log_path, "w");
+        if (log_fp)
+        {
+            fprintf(log_fp, "=== MOLINETTE REPORT: %s ===\n", ex_name);
+            fprintf(log_fp, "Status : COMPILATION FAILED\n\n");
+            fprintf(log_fp, "--- Compiler Errors ---\n");
+            fprintf(log_fp, "%s\n", err_buf);
+            fclose(log_fp);
+        }
+
         grader_result_set_error(result, "Compilation failed");
         grader_result_add_check(result, 0, "Compilation: FAILED");
         grader_print_report(result, ex_name);
+        printf(YELLOW "[!] Molinette errors saved to: ./trace/%s_molinette.log\n" RESET, ex_name);
         grader_result_destroy(result);
         return (-1);
     }
@@ -328,27 +636,117 @@ static int run_grading(const char *ex_name)
     if (strcmp(ex_name, "hello") == 0)
     {
         total_tests = 1;
-        run_test_case(binary, "", "Hello World!", 
-            "Test: hello displays correct output", 
+        run_test_case(binary, "", "", "Hello World!",
+            "hello displays 'Hello World!'",
             test_output, sizeof(test_output), &passed_tests);
     }
     else if (strcmp(ex_name, "aff_z") == 0)
     {
         total_tests = 3;
-        run_test_case(binary, "zoo", "z", 
-            "Test 1: 'zoo'", 
+        run_test_case(binary, "zoo", "", "z",
+            "aff_z \"zoo\" -> 'z'",
             test_output, sizeof(test_output), &passed_tests);
-        run_test_case(binary, "abc", "", 
-            "Test 2: 'abc'", 
+        run_test_case(binary, "abc", "", "",
+            "aff_z \"abc\" -> ''",
             test_output, sizeof(test_output), &passed_tests);
-        run_test_case(binary, "ZZZZ", "", 
-            "Test 3: 'ZZZZ'", 
+        run_test_case(binary, "", "", "z",
+            "aff_z (no args) -> 'z'",
             test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "aff_a") == 0)
+    {
+        total_tests = 3;
+        run_test_case(binary, "abc", "", "a",
+            "aff_a \"abc\" -> 'a'",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "\"zz sent le poney\"", "", "",
+            "aff_a \"zz sent le poney\" -> ''",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "", "", "a",
+            "aff_a (no args) -> 'a'",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "aff_first_param") == 0)
+    {
+        total_tests = 2;
+        run_test_case(binary, "hello world", "", "hello",
+            "aff_first_param \"hello world\" -> 'hello'",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "", "", "",
+            "aff_first_param (no args) -> ''",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "aff_last_param") == 0)
+    {
+        total_tests = 2;
+        run_test_case(binary, "hello world", "", "world",
+            "aff_last_param \"hello world\" -> 'world'",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "", "", "",
+            "aff_last_param (no args) -> ''",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "ft_countdown") == 0)
+    {
+        total_tests = 1;
+        run_test_case_multiline(binary, "", "9\n8\n7\n6\n5\n4\n3\n2\n1\n0",
+            "ft_countdown outputs 9 down to 0",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "repeat_alpha") == 0)
+    {
+        total_tests = 2;
+        run_test_case(binary, "abc", "", "abbccc",
+            "repeat_alpha \"abc\" -> 'abbccc'",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "", "", "",
+            "repeat_alpha (no args) -> ''",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "rev_print") == 0)
+    {
+        total_tests = 2;
+        run_test_case(binary, "\"Hello World\"", "", "dlroW olleH",
+            "rev_print \"Hello World\" -> 'dlroW olleH'",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "", "", "",
+            "rev_print (no args) -> ''",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "do_op") == 0)
+    {
+        total_tests = 3;
+        run_test_case(binary, "1 + 1", "", "2",
+            "do_op 1 + 1 -> 2",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "10 / 3", "", "3",
+            "do_op 10 / 3 -> 3",
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "10 % 3", "", "1",
+            "do_op 10 %% 3 -> 1",
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "ft_putstr") == 0 ||
+             strcmp(ex_name, "ft_strlen") == 0 ||
+             strcmp(ex_name, "ft_swap") == 0 ||
+             strcmp(ex_name, "ft_atoi") == 0 ||
+             strcmp(ex_name, "ft_strcmp") == 0 ||
+             strcmp(ex_name, "ft_strcpy") == 0 ||
+             strcmp(ex_name, "max") == 0 ||
+             strcmp(ex_name, "ft_itoa") == 0 ||
+             strcmp(ex_name, "ft_strdup") == 0 ||
+             strcmp(ex_name, "ft_strrev") == 0)
+    {
+        write_test_main(ex_name, rendu_dir, binary,
+                        test_output, sizeof(test_output),
+                        &passed_tests, &total_tests);
     }
     else
     {
-        total_tests = 1;
-        grader_result_add_check(result, 1, "Code compiles");
+        grader_result_add_check(result, 1, "Code compiles successfully");
+        grader_print_report(result, ex_name);
+        grader_result_destroy(result);
+        return (0);
     }
 
     if (total_tests > 0)
@@ -363,6 +761,26 @@ static int run_grading(const char *ex_name)
     }
 
     grader_print_report(result, ex_name);
+
+    if (passed_tests != total_tests || total_tests == 0)
+    {
+        char log_path[256];
+        FILE *log_fp;
+
+        snprintf(log_path, sizeof(log_path), "./trace/%s_molinette.log", ex_name);
+        log_fp = fopen(log_path, "w");
+        if (log_fp)
+        {
+            fprintf(log_fp, "=== MOLINETTE REPORT: %s ===\n", ex_name);
+            fprintf(log_fp, "Passed : %d / %d\n", passed_tests, total_tests);
+            fprintf(log_fp, "Failed : %d / %d\n\n", total_tests - passed_tests, total_tests);
+            fprintf(log_fp, "--- Test Details ---\n");
+            fprintf(log_fp, "%s\n", test_output);
+            fclose(log_fp);
+            printf(YELLOW "[!] Molinette errors saved to: ./trace/%s_molinette.log\n" RESET, ex_name);
+        }
+    }
+
     grader_result_destroy(result);
 
     return (passed_tests == total_tests && total_tests > 0 ? 0 : -1);
@@ -416,7 +834,7 @@ static t_grade runner_get_grade(t_session *session, t_exercise *ex)
         else if (ft_strcmp(input, "gradme") == 0)
         {
             int test_result = run_grading(ex_name);
-            
+
             if (test_result == 0)
             {
                 printf(GREEN "\n>>> PASSED <<<\n\n" RESET);
