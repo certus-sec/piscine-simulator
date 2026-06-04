@@ -164,6 +164,7 @@ bash
 bash
 
 make && ./piscine-simulator
+```
 
 🎮 How To Use
 Main Menu
