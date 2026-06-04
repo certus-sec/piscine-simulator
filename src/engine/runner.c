@@ -1,8 +1,12 @@
 #include "simulator.h"
+#include "grader.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ftw.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #define CLEAR             "\033[2J\033[H"
 #define RED               "\033[1;31m"
@@ -12,6 +16,9 @@
 #define CYAN              "\033[1;36m"
 #define WHITE             "\033[1;37m"
 #define RESET             "\033[0m"
+
+#define PENALTY_TIMES_COUNT 4
+static const int g_penalty_times[PENALTY_TIMES_COUNT] = {600, 1200, 2400, 3600};
 
 static void runner_run_exam(t_session *session, int exam_id);
 static void runner_run_level(t_session *session);
@@ -38,9 +45,19 @@ void runner_start(t_session *session, int start_exam)
     }
 }
 
+static int remove_callback(const char *path, const struct stat *sb,
+    int typeflag, struct FTW *ftwbuf)
+{
+    (void)sb;
+    (void)typeflag;
+    (void)ftwbuf;
+    return remove(path);
+}
+
 static void cleanup_previous_exam(void)
 {
-    system("rm -rf ./rendu ./trace");
+    nftw("./rendu", remove_callback, 64, FTW_DEPTH | FTW_PHYS);
+    nftw("./trace", remove_callback, 64, FTW_DEPTH | FTW_PHYS);
 }
 
 static void runner_run_exam(t_session *session, int exam_id)
@@ -80,20 +97,23 @@ static void apply_grademe_penalty(t_session *session)
 {
     int wait_time;
     int i;
+    int count;
 
-    if (session->grademe_count == 0)
-        wait_time = 600;
-    else if (session->grademe_count == 1)
-        wait_time = 1200;
-    else if (session->grademe_count == 2)
-        wait_time = 2400;
-    else
-        wait_time = 3600;
+    if (!session)
+        return;
+
+    count = session->grademe_count;
+    if (count < 0)
+        count = 0;
+    if (count >= PENALTY_TIMES_COUNT)
+        count = PENALTY_TIMES_COUNT - 1;
+
+    wait_time = g_penalty_times[count];
 
     printf(YELLOW "\n+--------------------------------------+\n");
     printf("|     GRADEME PENALTY                  |\n");
     printf("|                                      |\n");
-    printf("|  Attempt: %-3d                        |\n", session->grademe_count + 1);
+    printf("|  Attempt: %-3d                        |\n", count + 1);
     printf("|  Wait:   %02d:%02d                       |\n", wait_time / 60, wait_time % 60);
     printf("+--------------------------------------+\n" RESET);
 
@@ -187,23 +207,12 @@ static void runner_run_level(t_session *session)
     }
 }
 
-static int trace_is_empty(const char *trace_path)
-{
-    FILE *fp;
-    long size;
-
-    fp = fopen(trace_path, "r");
-    if (!fp)
-        return (1);
-    fseek(fp, 0, SEEK_END);
-    size = ftell(fp);
-    fclose(fp);
-    return (size == 0);
-}
-
 static void get_ex_name(const char *full_name, char *out, size_t size)
 {
     char *dot;
+
+    if (!full_name || !out || size == 0)
+        return;
 
     snprintf(out, size, "%s", full_name);
     dot = strrchr(out, '.');
@@ -211,48 +220,55 @@ static void get_ex_name(const char *full_name, char *out, size_t size)
         *dot = '\0';
 }
 
-static void run_correction(const char *ex_name, const char *trace_path)
+static int safe_mkdir(const char *path)
 {
-    char cmd[512];
+    if (!path)
+        return (-1);
+    return mkdir(path, 0755);
+}
 
-    snprintf(cmd, sizeof(cmd), "mkdir -p ./rendu/%s ./trace", ex_name);
-    system(cmd);
+static int run_grading(const char *ex_name)
+{
+    t_grader_result *result;
+    char rendu_dir[256];
 
-    snprintf(cmd, sizeof(cmd), "> %s", trace_path);
-    system(cmd);
+    if (!ex_name)
+        return (-1);
 
-    snprintf(cmd, sizeof(cmd),
-        "ls ./rendu/%s/*.c > /dev/null 2>> %s",
-        ex_name, trace_path);
-    if (system(cmd) != 0)
+    snprintf(rendu_dir, sizeof(rendu_dir), "./rendu/%s", ex_name);
+    safe_mkdir("./trace");
+
+    result = grader_result_new();
+    if (!result)
+        return (-1);
+
+    if (grader_compile(ex_name, rendu_dir, result) < 0)
     {
-        snprintf(cmd, sizeof(cmd),
-            "echo 'Error: no .c files found in ./rendu/%s/' >> %s",
-            ex_name, trace_path);
-        system(cmd);
-        return ;
+        grader_print_report(result, ex_name);
+        grader_result_destroy(result);
+        return (-1);
     }
 
-    snprintf(cmd, sizeof(cmd),
-        "cc -Wall -Wextra -Werror ./rendu/%s/*.c -o /tmp/ex_out 2>> %s",
-        ex_name, trace_path);
-    system(cmd);
+    grader_result_add_check(result, 1, "Code compiled successfully");
+    grader_print_report(result, ex_name);
+    grader_result_destroy(result);
+
+    return (0);
 }
 
 static t_grade runner_get_grade(t_session *session, t_exercise *ex)
 {
     char  *content;
     char  input[64];
-    char  cmd[256];
-    char  trace_path[256];
     char  ex_name[64];
+
+    if (!session || !ex)
+        return (GRADE_FAIL);
 
     get_ex_name(ex->name, ex_name, sizeof(ex_name));
 
-    snprintf(trace_path, sizeof(trace_path), "./trace/%s", ex_name);
-
-    snprintf(cmd, sizeof(cmd), "mkdir -p ./rendu/%s ./trace", ex_name);
-    system(cmd);
+    safe_mkdir("./rendu");
+    safe_mkdir("./trace");
 
     content = file_read(ex->subject_path);
     if (content)
@@ -261,7 +277,8 @@ static t_grade runner_get_grade(t_session *session, t_exercise *ex)
         xfree((void **)&content);
     }
 
-    printf(YELLOW "Put your code in: ./rendu/%s/\n\n" RESET, ex_name);
+    printf(YELLOW "📂 Create directory: ./rendu/%s/\n" RESET, ex_name);
+    printf(YELLOW "📝 Put your code files there (*.c, *.h)\n\n" RESET);
     print_commands();
 
     while (1)
@@ -279,18 +296,16 @@ static t_grade runner_get_grade(t_session *session, t_exercise *ex)
         }
         else if (ft_strcmp(input, "test") == 0)
         {
-            run_correction(ex_name, trace_path);
-            if (trace_is_empty(trace_path))
-                printf(GREEN "\n>>> OK: Compilation successful <<<\n\n" RESET);
+            if (run_grading(ex_name) == 0)
+                printf(GREEN "\n>>> Test mode: Ready for submission <<<\n\n" RESET);
             else
-                printf(RED "\n>>> KO: Compilation failed <<<\n" RESET);
+                printf(RED "\n>>> Test mode: Fix compilation errors <<<\n\n" RESET);
         }
         else if (ft_strcmp(input, "gradme") == 0)
         {
             apply_grademe_penalty(session);
 
-            run_correction(ex_name, trace_path);
-            if (trace_is_empty(trace_path))
+            if (run_grading(ex_name) == 0)
             {
                 printf(GREEN "\n>>> PASSED <<<\n\n" RESET);
                 return (GRADE_PASS);

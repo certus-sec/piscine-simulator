@@ -1,7 +1,7 @@
 NAME = piscine-simulator
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I include
+CFLAGS = -Wall -Wextra -Werror -I include -D_GNU_SOURCE
 
 SRC_DIR = src
 BUILD_DIR = build
@@ -31,7 +31,10 @@ SRCS = $(SRC_DIR)/main.c \
        $(SRC_DIR)/io/logger.c \
        $(SRC_DIR)/utils/strings.c \
        $(SRC_DIR)/utils/memory.c \
-       $(SRC_DIR)/utils/time.c
+       $(SRC_DIR)/utils/time.c \
+       $(SRC_DIR)/grader/grader.c \
+       $(SRC_DIR)/grader/exercise_grader.c \
+       $(SRC_DIR)/grader/grading_handler.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 TEST_OBJS = $(filter-out $(BUILD_DIR)/main.o,$(OBJS))
@@ -58,11 +61,23 @@ run: $(NAME)
 	./$(NAME)
 
 test: $(NAME)
-	$(CC) $(CFLAGS) tests/test_score.c $(TEST_OBJS) -o test_score
-	$(CC) $(CFLAGS) tests/test_levels.c $(TEST_OBJS) -o test_levels
-	$(CC) $(CFLAGS) tests/test_engine.c $(TEST_OBJS) -o test_engine
-	./test_score
-	./test_levels
-	./test_engine
+	@mkdir -p ./trace
+	@echo "Running unit tests..."
+	@$(CC) $(CFLAGS) tests/test_score.c $(TEST_OBJS) -o test_score
+	@./test_score
+	@echo ""
+	@$(CC) $(CFLAGS) tests/test_levels.c $(TEST_OBJS) -o test_levels
+	@./test_levels
+	@echo ""
+	@$(CC) $(CFLAGS) tests/test_engine.c $(TEST_OBJS) -o test_engine
+	@./test_engine
+	@echo ""
+	@echo "Test logs saved in ./trace/"
+	@echo ""
+	@cat ./trace/test_score.log
+	@echo ""
+	@cat ./trace/test_levels.log
+	@echo ""
+	@cat ./trace/test_engine.log
 
 .PHONY: all clean fclean re run test
