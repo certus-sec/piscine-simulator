@@ -1,49 +1,30 @@
+<img src ="https://capsule-render.vercel.app/api?type=waving&color=0:0a0a0a,50:1a1a2e,100:16213e&height=200&section=header&fontColor=00d4ff&text=PISCINE%20SIMULATOR&fontSize=90&fontFamily=JetBrains%20Mono&animation=fadeIn" width="100%"/>
+
 <div align="center">
 
-
-<pre>
-<img src="piscine-simulator/data/banner.png" height="100" />
-</pre>
-
-<br>
-
-<img src="https://img.shields.io/badge/language-C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="C">
-<img src="https://img.shields.io/badge/build-Makefile-427819?style=for-the-badge&logo=gnu&logoColor=white" alt="Makefile">
-<img src="https://img.shields.io/badge/interface-Terminal-111827?style=for-the-badge&logo=gnometerminal&logoColor=white" alt="Terminal">
-<img src="https://img.shields.io/badge/style-42%20%2F%201337-000000?style=for-the-badge" alt="42 / 1337">
-
-<br><br>
-
-<img src="https://img.shields.io/badge/version-1.0.0-06b6d4?style=flat-square">
-<img src="https://img.shields.io/badge/license-MIT-10b981?style=flat-square">
-<img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS-8b5cf6?style=flat-square">
-<img src="https://img.shields.io/badge/dependencies-none-f59e0b?style=flat-square">
-
-<br><br>
-
-<p align="center">
-  <strong>🎓 A lightweight terminal exam simulator inspired by the 1337 / 42 piscine environment.</strong><br>
-  <em>Practice your C skills in an authentic exam atmosphere. No internet, no IDE, just you and the terminal.</em>
-</p>
-
-<br>
-
-
-[🚀 Quick Start](#-quick-start)
-•
-[📖 Documentation](#-overview)
-•
-[📊 Exam Rules](#-exam-rules)
-•
-[🔧 Commands](#-make-commands)
-•
-[📁 Structure](#-project-structure)
+[![typing](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&duration=3000&pause=800&color=00d4ff&center=true&vCenter=true&multiline=false&width=600&lines=🏊+42%2F1337+Piscine+Exam+Simulator;Practice+like+a+pro+before+the+real+exam;Terminal+based+%7C+Pure+C+%7C+Zero+Dependencies)](https://github.com/certus-sec/piscine-simulator)
 
 </div>
 
 ---
 
-<br>
+<div align="center">
+
+## 🎓 Project Badges
+
+[![Language](https://img.shields.io/badge/language-C-00599C?style=for-the-badge&logo=c&logoColor=white&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+[![Build](https://img.shields.io/badge/build-Makefile-427819?style=for-the-badge&logo=gnu&logoColor=white&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+[![Interface](https://img.shields.io/badge/interface-Terminal-111827?style=for-the-badge&logo=gnometerminal&logoColor=white&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+[![License](https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge&logoColor=white&labelColor=0d0d0d)](./LICENSE)
+
+[![Version](https://img.shields.io/badge/version-1.0.0-06b6d4?style=flat&logo=github&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-8b5cf6?style=flat&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+[![Dependencies](https://img.shields.io/badge/dependencies-none-f59e0b?style=flat&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+[![Style](https://img.shields.io/badge/code%20style-42%20%2F%201337-000000?style=flat&labelColor=0d0d0d)](https://github.com/certus-sec/piscine-simulator)
+
+</div>
+
+---
 
 ## 📋 Table of Contents
 
@@ -54,524 +35,377 @@
 - [🎮 How To Use](#-how-to-use)
 - [✅ Validation Flow](#-validation-flow)
 - [📊 Exam Rules](#-exam-rules)
-- [🔧 Make Commands](#-make-commands)
+- [🔧 Build Commands](#-build-commands)
 - [🗂️ Project Structure](#-project-structure)
 - [🐛 Troubleshooting](#-troubleshooting)
-- [📝 Notes](#-notes)
 - [🤝 Contributing](#-contributing)
 - [📜 License](#-license)
 
-<br>
-
 ---
-
-<br>
 
 ## 🎯 Overview
 
+**Piscine Simulator** is a terminal-based exam environment designed to replicate the authentic **1337 / 42 Piscine** experience. It provides students with a realistic practice platform to solve C programming exercises under exam conditions.
+
 <div align="center">
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                                                             │
-│   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐              │
-│   │  Exam 00 │───▶│  Exam 01 │───▶│  Exam 02 │───▶│  Exam 03 │              │
-│   └──────────┘    └──────────┘    └──────────┘    └──────────┘              │
-│        │               │               │               │                    │
-│        ▼               ▼               ▼               ▼                    │
-│   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐              │
-│   │ Level 01 │    │ Level 01 │    │ Level 01 │    │ Level 01 │              │
-│   │ Level 02 │    │ Level 02 │    │ Level 02 │    │ Level 02 │              │
-│   │   ...    │    │   ...    │    │   ...    │    │   ...    │              │
-│   │ Level 08 │    │ Level 08 │    │ Level 08 │    │ Level 16 │              │
-│   └──────────┘    └──────────┘    └──────────┘    └──────────┘              │
-│                                                                             │
-│                         🏁 TARGET: 100 / 100                                │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+┌─────────────────────────────────────────────────────────────────┐ │ │ │ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ │ │ │ Exam 00 │───▶│ Exam 01 │───▶│ Exam 02 │───▶│ Exam 03 │ │ │ └──────────┘ └──────────┘ └──────────┘ └──────────┘ │ │ │ │ │ │ │ │ ▼ ▼ ▼ ▼ │ │ ┌─────────────────────────────────────────────────────────┐ │ │ │ Level 01 → Level 02 → ... → Level 08 / 16 │ │ │ │ (Random exercise pool per level) │ │ │ └─────────────────────────────────────────────────────────┘ │ │ 🏁 TARGET: 100 / 100 │ │ │ └─────────────────────────────────────────────────────────────────┘
+Code
+
 
 </div>
 
-**Piscine Simulator** recreates the iconic 42-style exam flow directly in your terminal. It is designed to help students practice under realistic exam conditions — randomized exercises, strict compilation flags, time pressure, and level-based progression.
+### 📊 Exam Structure
 
-### The Exam Loop
-
-```
-    ┌─────────────┐
-    │  Start Exam │
-    └──────┬──────┘
-           │
-           ▼
-    ┌─────────────┐     ┌─────────────┐
-    │ Get Random  │────▶│  Write Code │
-    │  Exercise   │     │  in rendu/  │
-    └──────┬──────┘     └──────┬──────┘
-           │                    │
-           │         ┌──────────┘
-           │         ▼
-           │    ┌─────────────┐
-           │    │   test      │◀──────────┐
-           │    │  (compile)  │           │
-           │    └──────┬──────┘           │
-           │           │                   │
-           │     ┌─────┴─────┐             │
-           │     │           │             │
-           │     ▼           ▼             │
-           │  ┌─────┐    ┌─────┐          │
-           │  │ ❌  │    │ ✅  │          │
-           │  │Fail │    │Pass │          │
-           │  └──┬──┘    └──┬──┘          │
-           │     │          │              │
-           │     ▼          ▼              │
-           │  ┌─────┐    ┌─────────┐      │
-           │  │Stay │    │  submit │      │
-           │  │Same  │    │         │      │
-           │  │Level │    └────┬────┘      │
-           │  └──┬──┘         │            │
-           │     │            ▼            │
-           │     │       ┌─────────┐       │
-           └─────┴──────▶│  Next   │       │
-                         │  Level  │───────┘
-                         └─────────┘
-```
-
-<br>
+| Exam | Levels | Difficulty | Duration | Total Exercises |
+|:----:|:------:|:----------:|:--------:|:---------------:|
+| **Exam 00** | 8 | Beginner | 4h | 48 |
+| **Exam 01** | 8 | Easy | 4h | 48 |
+| **Exam 02** | 8 | Intermediate | 4h | 48 |
+| **Exam 03** | 16 | Advanced | 8h | 96 |
 
 ---
-
-<br>
 
 ## ✨ Features
 
-### Core Features
+<table width="100%">
+<tr>
+<td width="50%">
 
-| Feature | Description | Status |
-|:--------|:------------|:------:|
-| 🎓 **4 Exam Tracks** | `exam00` through `exam03` with progressive difficulty | ✅ |
-| 📝 **240 Exercises** | Full subject pool covering all C fundamentals | ✅ |
-| 🎲 **Random Picker** | Smart randomization with anti-repetition per session | ✅ |
-| 📈 **Level Progression** | Automatic score tracking and level unlocking | ✅ |
-| ⏱️ **Exam Timers** | Realistic 4h and 8h exam durations | ✅ |
-| 🔄 **Retry Logic** | Stay on same level, get new exercise on failure | ✅ |
-| 🖥️ **Terminal UI** | Beautiful banners, progress bars, and clean output | ✅ |
-| 📁 **Auto Workspace** | Generated `rendu/` and `trace/` directories | ✅ |
-| 🏅 **Certificate** | ASCII completion certificate on 100/100 | ✅ |
-| ⚡ **Zero Dependencies** | Pure C and Make — nothing else needed | ✅ |
+### 🎓 Core Functionality
+- ✅ **4 Exam Tracks** with progressive difficulty
+- ✅ **240+ Exercises** covering C fundamentals
+- ✅ **Smart Randomization** (no repeats per session)
+- ✅ **Auto Progression** with level unlocking
+- ✅ **Realistic Timers** (4h and 8h exams)
+- ✅ **Retry Logic** on failure
 
-### What Makes It Special
+</td>
+<td width="50%">
 
-- 🧠 **Anti-Cheat Memory** — Won't give you the same exercise twice in one session
-- 🏗️ **Strict Compilation** — Uses `-Wall -Wextra -Werror` just like the real exam
-- 📊 **Live Progress** — Watch your score grow as you conquer each level
-- 🎨 **Beautiful Terminal** — ASCII art banners and color-coded output
-- 🐧 **Unix-Native** — Feels right at home on Linux and macOS
+### 🚀 User Experience
+- ✅ **Beautiful Terminal UI** with ASCII banners
+- ✅ **Live Progress Bars** tracking your score
+- ✅ **Auto Workspace** (rendu/ & trace/)
+- ✅ **Completion Certificate** at 100/100
+- ✅ **Strict Compilation** (-Wall -Wextra -Werror)
+- ✅ **Zero Dependencies** (Pure C + Make)
 
-<br>
+</td>
+</tr>
+</table>
+
+### 🧠 What Makes It Special
+
+• Anti-Cheat Memory → Won't repeat exercises in one session • Exam Authenticity → Mimics real 42 environment exactly • Grademe Penalties → Progressive wait times (10m, 20m, 40m, 1h) • Unix-First Design → Native feel on Linux & macOS • Educational Focus → Learn under realistic exam pressure
+Code
+
 
 ---
-
-<br>
 
 ## ⚡ Requirements
 
-### Minimum Requirements
-
-You need a **Unix-like environment** with just three things:
+### System Requirements
 
 | Tool | Version | Purpose |
 |:-----|:--------|:--------|
-| `cc` or `gcc` | Any recent | C compiler |
-| `make` | GNU Make 3.81+ | Build system |
-| `terminal` | Any | User interface |
-
-### Supported Platforms
-
-- ✅ **Linux** (Ubuntu, Debian, Fedora, Arch, etc.)
-- ✅ **macOS** (Intel & Apple Silicon)
-- ⚠️ **Windows** (via WSL2 only — native Windows not supported)
+| **C Compiler** | gcc/clang | Compile source code |
+| **GNU Make** | 3.81+ | Build system |
+| **Terminal** | Any | User interface |
+| **OS** | Linux/macOS | Execution environment |
 
 ### What You DON'T Need
 
-```
-❌ No external libraries
-❌ No package managers (npm, pip, etc.)
-❌ No internet connection after clone
-❌ No IDE or text editor (use nano, vim, emacs, or whatever you prefer)
-```
+❌ No external libraries ❌ No package managers (npm, pip, etc.) ❌ No internet after clone ❌ No IDE (use nano, vim, or your editor)
+Code
 
-> 💡 **Pro Tip:** The simulator is designed to work exactly like the real 42 exam environment. If you can run it, you're ready for the real thing.
 
-<br>
-
----
-
-<br>
-
-## 🚀 Quick Start
-
-### 1. Clone the Repository
+<details>
+<summary><strong>🔧 Install Compiler</strong></summary>
 
 ```bash
-git clone <repo-url>
+# Ubuntu / Debian
+sudo apt-get update && sudo apt-get install build-essential
+
+# Fedora / RHEL
+sudo dnf install gcc make
+
+# macOS
+xcode-select --install
+
+</details>
+🚀 Quick Start
+1️⃣ Clone Repository
+bash
+
+git clone https://github.com/certus-sec/piscine-simulator.git
 cd piscine-simulator
-```
 
-### 2. Build
+2️⃣ Build
+bash
 
-```bash
 make
-```
 
-You should see output like:
+Expected output:
+Code
 
-```
-cc -Wall -Wextra -Werror -I include -c src/core/main.c -o obj/core/main.o
-cc -Wall -Wextra -Werror -I include -c src/engine/exam.c -o obj/engine/exam.o
+cc -Wall -Wextra -Werror -I include -c src/main.c -o build/main.o
+cc -Wall -Wextra -Werror -I include -c src/engine/exam_engine.c -o build/exam_engine.o
 ...
-cc -Wall -Wextra -Werror obj/*.o -o piscine-simulator
-✅ Build complete: ./piscine-simulator
-```
+cc -Wall -Wextra -Werror build/*.o -o piscine-simulator
+✅ Build successful: ./piscine-simulator
 
-### 3. Run
+3️⃣ Run
+bash
 
-```bash
 ./piscine-simulator
-```
 
-### One-Liner
+⚡ One-Liner
+bash
 
-```bash
-make run
-```
+make && ./piscine-simulator
 
-<br>
+🎮 How To Use
+Main Menu
+Code
 
----
-
-<br>
-
-## 🎮 How To Use
-
-### Main Menu
-
-When you start the simulator, you'll see the main menu:
-
-```
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                                                                               ║
-║                    🏊  PISCINE SIMULATOR v1.0.0  🏊                           ║
-║                                                                               ║
-╠═══════════════════════════════════════════════════════════════════════════════╣
-║                                                                               ║
-║   Select your exam:                                                           ║
-║                                                                               ║
-║      [1] 📝  Start Exam 00  ──  8 levels  ──  4 hours                         ║
-║      [2] 📝  Start Exam 01  ──  8 levels  ──  4 hours                         ║
-║      [3] 📝  Start Exam 02  ──  8 levels  ──  4 hours                         ║
-║      [4] 📝  Start Exam 03  ──  16 levels ──  8 hours                         ║
-║                                                                               ║
-║      [0] 🚪  Exit                                                             ║
-║                                                                               ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║           🏊 PISCINE SIMULATOR v1.0.0 🏊                 ║
+║                                                           ║
+╠═══════════════════════════════════════════════════════════╣
+║                                                           ║
+║  Select your exam:                                        ║
+║                                                           ║
+║     [1] 📝  Start Exam 00  ──  8 levels  ──  4 hours      ║
+║     [2] 📝  Start Exam 01  ──  8 levels  ──  4 hours      ║
+║     [3] 📝  Start Exam 02  ──  8 levels  ──  4 hours      ║
+║     [4] 📝  Start Exam 03  ──  16 levels ──  8 hours      ║
+║                                                           ║
+║     [0] 🚪  Exit                                          ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
 
 Choice: _
-```
 
-### During the Exam
+During Exam
+Code
 
-After selecting an exam, the simulator presents your exercise:
+╔═══════════════════════════════════════════════════════════╗
+║  📋 EXERCISE: ft_strlen                                  ║
+╠═══════════════════════════════════════════════════════════╣
+║                                                           ║
+║  Assignment:   ft_strlen                                 ║
+║  Expected:     ft_strlen.c                               ║
+║  Allowed:      strlen, printf                            ║
+║                                                           ║
+║  ─────────────────────────────────────────────────────    ║
+║  Write a function that returns the length of a string   ║
+║  Do not use the original strlen function.               ║
+║                                                           ║
+╠═══════════════════════════════════════════════════════════╣
+║  📁 Directory: ./rendu/ft_strlen/                        ║
+║                                                           ║
+║  💻 Commands: test | gradme | exit                       ║
+╚═══════════════════════════════════════════════════════════╝
 
-```
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║  📋 EXERCISE: aff_a                                                           ║
-╠═══════════════════════════════════════════════════════════════════════════════╣
-║                                                                               ║
-║  Assignment name  : aff_a                                                     ║
-║  Expected files   : aff_a.c                                                   ║
-║  Allowed functions: write                                                     ║
-║                                                                               ║
-║  --------------------------------------------------------------------------------
-║  Write a program that takes a string and displays the first 'a' character     ║
-║  it encounters in it, followed by a newline. If there are no 'a' characters   ║
-║  in the string, the program just writes a newline.                            ║
-║                                                                               ║
-╠═══════════════════════════════════════════════════════════════════════════════╣
-║  📁 Put your code in: ./rendu/aff_a/                                          ║
-║                                                                               ║
-║  🎮 Commands:  test  |  submit  |  exit                                       ║
-║                                                                               ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
-```
+Available Commands
+Command	Purpose	Penalty
+test	Compile & check for errors	⏱️ None
+gradme	Submit solution	⏱️ Progressive wait
+exit	Quit immediately	⏱️ End session
+✅ Validation Flow
+Step-by-Step Process
+Code
 
-### Writing Your Solution
+┌────────────────────────────────────────────────────────┐
+│ STEP 1: Create Workspace                               │
+│         mkdir -p ./rendu/<exercise>/ ./trace/           │
+├────────────────────────────────────────────────────────┤
+│ STEP 2: User Writes Code                               │
+│         nano/vim/code ./rendu/<exercise>/<name>.c       │
+├────────────────────────────────────────────────────────┤
+│ STEP 3: Compile with Strict Flags                      │
+│         cc -Wall -Wextra -Werror *.c -o /tmp/ex_out    │
+├────────────────────────────────────────────────────────┤
+│ STEP 4: Evaluate Result                                │
+│         ✅ Success → Points up + Next level             │
+│         ❌ Failure → Log error + Same level             │
+└────────────────────────────────────────────────────────┘
 
-Create your source file in the designated folder:
+Compilation Flags Explained
+Flag	Meaning
+-Wall	Enable all common warnings
+-Wextra	Enable extra warnings
+-Werror	Treat warnings as errors (strict)
+Result Handling
+Outcome	Behavior
+✅ Compilation Success	Score +12pts → Next level
+❌ Compilation Error	Saved to trace/ → Same level
+⚠️ No Source Files	Error message → No penalty
+📊 Exam Rules
+Scoring System
+<div align="center">
+Code
 
-```bash
-# Create the exercise directory
-mkdir -p rendu/aff_a
+🏁 TARGET SCORE: 100 / 100
 
-# Write your solution (use your preferred editor)
-nano rendu/aff_a/aff_a.c
-vim rendu/aff_a/aff_a.c
-code rendu/aff_a/aff_a.c   # VS Code
-```
+Level 1  ──▶  12 pts    ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  12%
+Level 2  ──▶  12 pts    ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  24%
+Level 3  ──▶  12 pts    ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  36%
+Level 4  ──▶  12 pts    ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░  48%
+Level 5  ──▶  12 pts    ████████████████████░░░░░░░░░░░░░░░░░░░░░░░░  60%
+Level 6  ──▶  12 pts    ████████████████████████░░░░░░░░░░░░░░░░░░░░░  72%
+Level 7  ──▶  12 pts    ████████████████████████████░░░░░░░░░░░░░░░░░  84%
+Level 8  ──▶  16 pts    ████████████████████████████████░░░░░░░░░░░░░░ 100%
 
-### Available Commands
+</div>
+Success vs Failure
+<table width="100%"> <tr> <td width="50%">
+✅ On Success
+Code
 
-Once back at the simulator prompt, use these commands:
+┌─────────────────────────────┐
+│ ✅ EXERCISE PASSED!         │
+│                             │
+│ Score:  12/100  ──▶  24/100 │
+│ Level:  01      ──▶  02     │
+│ Status: UNLOCKED            │
+│                             │
+│ Next pool loaded...         │
+└─────────────────────────────┘
 
-| Command | What It Does | When To Use |
-|:--------|:-------------|:------------|
-| `test` | Compiles your code with `-Wall -Wextra -Werror` | Check if your code compiles before submitting |
-| `submit` | Compiles and validates your attempt | When you're confident your solution is correct |
-| `exit` | Quits the simulator immediately | If you need to stop practicing |
+</td> <td width="50%">
+❌ On Failure
+Code
 
-<br>
+┌─────────────────────────────┐
+│ ❌ EXERCISE FAILED          │
+│                             │
+│ Score:  12/100  ──▶  12/100 │
+│ Level:  01      ──▶  01     │
+│ Status: TRY AGAIN           │
+│                             │
+│ Check trace/ for errors.    │
+└─────────────────────────────┘
 
----
+</td> </tr> </table>
+Grademe Penalty System
+Attempt	Wait Time	Impact
+1st	10 minutes	Build experience
+2nd	20 minutes	Think more carefully
+3rd	40 minutes	Reconsider your approach
+4th+	1 hour	Deep debugging required
+🔧 Build Commands
+Core Commands
+bash
 
-<br>
+make              # Build the simulator
+make run          # Build and run immediately
+make re            # Clean rebuild from scratch
+make test         # Build and run unit tests
+make clean        # Remove object files and tests
+make fclean       # Full clean (remove binary too)
 
-## ✅ Validation Flow
+Command Flow Diagram
+Code
 
-### Step-by-Step Process
+make          ──▶  Compile .c files  ──▶  Link  ──▶  ./piscine-simulator
+make run      ──▶  make  ──▶  ./piscine-simulator
+make test     ──▶  Compile tests  ──▶  Run tests
+make clean    ──▶  rm -f build/* test_*
+make fclean   ──▶  make clean  ──▶  rm -f piscine-simulator
+make re       ──▶  make fclean  ──▶  make
 
-For every exercise attempt, the simulator performs the following:
+🗂️ Project Structure
+Code
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  STEP 1  │  Create workspace directories                                    │
-│          │  ./rendu/<exercise_name>/  &  ./trace/                           │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  STEP 2  │  Scan for source files                                           │
-│          │  Search all *.c files in rendu/<exercise_name>/                  │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  STEP 3  │  Compile with strict flags                                       │
-│          │  cc -Wall -Wextra -Werror ./rendu/<ex>/*.c -o /tmp/ex_out        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  STEP 4  │  Evaluate result                                                 │
-│          │  ✅ Success → Score up, next level                               │
-│          │  ❌ Failure → Save errors to trace/, stay on level               │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Compilation Details
-
-```bash
-# The exact compilation command used by the simulator
-cc -Wall -Wextra -Werror ./rendu/<exercise_name>/*.c -o /tmp/ex_out
-```
-
-| Flag | Meaning |
-|:-----|:--------|
-| `-Wall` | Enable all common warnings |
-| `-Wextra` | Enable extra warnings not covered by `-Wall` |
-| `-Werror` | Treat all warnings as errors (strict mode) |
-
-### Result Handling
-
-| Outcome | Behavior |
-|:--------|:---------|
-| ✅ **Compilation Success** | Exercise marked as passed. Score increases. Level advances. |
-| ❌ **Compilation Error** | Errors written to `trace/<exercise_name>.trace`. Score unchanged. New exercise from same level. |
-| ⚠️ **No Source Files** | Error message displayed. No penalty. |
-
-<br>
-
----
-
-<br>
-
-## 📊 Exam Rules
-
-### Exam Comparison
-
-| Property | Exam 00 | Exam 01 | Exam 02 | Exam 03 |
-|:---------|:-------:|:-------:|:-------:|:-------:|
-| **Levels** | 8 | 8 | 8 | 16 |
-| **Exercises per Level** | 6 | 6 | 6 | 6 |
-| **Normal Level Points** | 12 | 12 | 12 | 6 |
-| **Final Level Points** | 16 | 16 | 16 | 10 |
-| **Duration** | 4 hours | 4 hours | 4 hours | 8 hours |
-| **Difficulty** | Beginner | Easy | Intermediate | Advanced |
-
-### Scoring System
-
-```
-╔═══════════════════════════════════════════════════════════════════════════════=╗
-║  🏁 TARGET SCORE:  100 / 100                                                   ║
-╠═══════════════════════════════════════════════════════════════════════════════=╣
-║                                                                                ║
-║  Level 1  ──▶  12 pts    ████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  12%  ║
-║  Level 2  ──▶  12 pts    ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  24% ║
-║  Level 3  ──▶  12 pts    ████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  36%║
-║  Level 4  ──▶  12 pts    ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  48% ║
-║  Level 5  ──▶  12 pts    ████████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░  60%  ║
-║  Level 6  ──▶  12 pts    ████████████████████████░░░░░░░░░░░░░░░░░░░░░░░  72%  ║
-║  Level 7  ──▶  12 pts    ████████████████████████████░░░░░░░░░░░░░░░░░░░░  84% ║
-║  Level 8  ──▶  16 pts    ████████████████████████████████░░░░░░░░░░░░░░░░░ 100%║
-║                                                                                ║
-╚═══════════════════════════════════════════════════════════════════════════════=╝
-```
-
-### Success vs Failure
-
-#### ✅ On Success
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  ✅ EXERCISE PASSED!                                         │
-│                                                             │
-│  Score:     12 / 100  ──▶  24 / 100                         │
-│  Level:     Level 1   ──▶  Level 2                          │
-│  Status:    UNLOCKED                                        │
-│                                                             │
-│  Next exercise pool loaded...                               │
-└─────────────────────────────────────────────────────────────┘
-```
-
-#### ❌ On Failure
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  ❌ EXERCISE FAILED                                          │
-│                                                             │
-│  Score:     12 / 100  ──▶  12 / 100  (no change)            │
-│  Level:     Level 1   ──▶  Level 1   (stay)                 │
-│                                                             │
-│  New exercise selected from current level...                │
-│  Check trace/aff_a.trace for compilation errors.            |
-└─────────────────────────────────────────────────────────────┘
-```
-
-<br>
-
----
-
-<br>
-
-## 🔧 Make Commands
-
-### Build Commands
-
-| Command | Description | Output |
-|:--------|:------------|:-------|
-| `make` | Build the simulator binary | `./piscine-simulator` |
-| `make run` | Build and immediately run | Binary + execution |
-| `make re` | Clean and rebuild from scratch | Fresh binary |
-
-### Test Commands
-
-| Command | Description | Output |
-|:--------|:------------|:-------|
-| `make test` | Build and run test binaries | Test results |
-
-### Clean Commands
-
-| Command | Description | Removes |
-|:--------|:------------|:--------|
-| `make clean` | Remove object files and test binaries | `obj/`, test executables |
-| `make fclean` | Full clean + remove simulator binary | Everything from `clean` + `./piscine-simulator` |
-
-### Command Flow
-
-```
-make          ──▶  Compile all .c files ──▶  Link ──▶  ./piscine-simulator
-make run      ──▶  make ──▶  ./piscine-simulator
-make test     ──▶  Compile tests ──▶  Run tests
-make clean    ──▶  rm -f obj/* test_binaries
-make fclean   ──▶  make clean ──▶  rm -f piscine-simulator
-make re       ──▶  make fclean ──▶  make
-```
-
-<br>
-
----
-
-<br>
-
-## 🗂️ Project Structure
-
-```
 📦 piscine-simulator/
 │
-├── 📁 data/                          # Exercise subject files
-│   ├── 📁 exam00/                    # 60 exercises for Exam 00
-│   │   ├── level01/
-│   │   ├── level02/
-│   │   ├── ...
-│   │   └── level08/
-│   ├── 📁 exam01/                    # 60 exercises for Exam 01
-│   ├── 📁 exam02/                    # 60 exercises for Exam 02
-│   └── 📁 exam03/                    # 60 exercises for Exam 03
+├── 📄 README.md                    # This file
+├── 📄 makefile                     # Build configuration
+├── 📄 .gitignore                   # Git ignore rules
 │
-├── 📁 include/                       # Header files
-│   ├── simulator.h                   # Main project header
-│   ├── engine.h                      # Exam engine definitions
-│   ├── ui.h                          # Terminal UI functions
-│   └── utils.h                       # Utility macros
+├── 📁 include/                     # Header files
+│   ├── simulator.h                 # Main project definitions
+│   ├── exam.h                      # Exam structures
+│   ├── level.h                     # Level structures
+│   ├── exercise.h                  # Exercise structures
+│   ├── config.h                    # Configuration
+│   └── utils.h                     # Utility functions
 │
-├── 📁 src/                           # Source code
-│   ├── 📁 core/                      # Entry point & initialization
-│   │   └── main.c
-│   ├── 📁 engine/                    # Exam logic & state machine
-│   │   ├── exam.c
-│   │   ├── level.c
-│   │   └── scoring.c
-│   ├── 📁 io/                        # File I/O operations
-│   │   ├── reader.c
-│   │   └── writer.c
-│   ├── 📁 logic/                     # Validation & compilation
-│   │   ├── validator.c
-│   │   └── compiler.c
-│   ├── 📁 ui/                        # Terminal interface & banners
-│   │   ├── banner.c
-│   │   ├── menu.c
-│   │   └── progress.c
-│   └── 📁 utils/                     # Helper functions
-│       ├── string_utils.c
-│       ├── memory.c
-│       └── random.c
+├── 📁 src/                         # Source code (96.1%)
+│   ├── main.c                      # Entry point
+│   │
+│   ├── 📁 engine/                  # Core Engines
+│   │   ├── exam_engine.c           # Exam state management
+│   │   ├── level_engine.c          # Level progression
+│   │   ├── score_engine.c          # Scoring system
+│   │   └── runner.c                # Main game loop
+│   │
+│   ├── 📁 core/                    # Core Logic
+│   │   ├── exam.c                  # Exam initialization
+│   │   ├── exercise.c              # Exercise handling
+│   │   ├── exercise_loader.c       # Load from disk
+│   │   ├── config_loader.c         # Load configuration
+│   │   └── level.c                 # Level setup
+│   │
+│   ├── 📁 logic/                   # Business Logic
+│   │   ├── random_picker.c         # Random selection (no repeats)
+│   │   ├── validator.c             # Code validation
+│   │   ├── retry_system.c          # Retry mechanics
+│   │   └── progression.c           # Progress tracking
+│   │
+│   ├── 📁 ui/                      # User Interface
+│   │   ├── banner.c                # ASCII banners
+│   │   ├── menu.c                  # Menu system
+│   │   ├── display.c               # Output formatting
+│   │   ├── progress_bar.c          # Progress visualization
+│   │   └── certificate.c           # Completion certificate
+│   │
+│   ├── 📁 io/                      # Input/Output
+│   │   ├── input_handler.c         # User input
+│   │   ├── file_reader.c           # Read files
+│   │   └── logger.c                # Event logging
+│   │
+│   └── 📁 utils/                   # Utilities
+│       ├── strings.c               # String functions
+│       ├── memory.c                # Memory management
+│       └── time.c                  # Time utilities
 │
-├── 📁 tests/                         # Unit tests
-│   ├── test_engine.c
-│   ├── test_validator.c
-│   └── test_utils.c
+├── 📁 tests/                       # Unit Tests
+│   ├── test_engine.c               # Engine tests
+│   ├── test_levels.c               # Level tests
+│   └── test_score.c                # Scoring tests
 │
-├── 📄 makefile                       # Build configuration
-├── 📄 README.md                      # This file
-└── 🚫 .gitignore                     # Git ignore rules
-```
+├── 📁 data/                        # Exercise Data
+│   ├── banner.png                  # Logo/Banner image
+│   ├── 📁 exam00/                  # Exam 00 exercises (60)
+│   ├── 📁 exam01/                  # Exam 01 exercises (60)
+│   ├── 📁 exam02/                  # Exam 02 exercises (60)
+│   └── 📁 exam03/                  # Exam 03 exercises (96)
+│
+└── 📁 build/                       # Build artifacts (generated)
+    └── *.o                         # Object files
 
-### Runtime Directories (Generated)
+Runtime Directories (Auto-Generated)
+Code
 
-```
-📁 rendu/                             # Your solutions go here
+📁 rendu/                          # Your solutions go here
 │   └── 📁 <exercise_name>/
 │       └── 📄 <exercise_name>.c
 │
-📁 trace/                             # Compilation logs
+📁 trace/                          # Compilation logs
 │   └── 📄 <exercise_name>.trace
-```
 
-<br>
+🐛 Troubleshooting
+<details> <summary><strong>❌ cc: Command not found</strong></summary>
 
----
+Problem: C compiler not installed or not in PATH.
 
-<br>
+Solution:
+bash
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### ❌ `make: cc: Command not found`
-
-**Problem:** C compiler not installed or not in PATH.
-
-**Solution:**
-```bash
 # Ubuntu/Debian
 sudo apt-get install build-essential
 
@@ -580,103 +414,97 @@ sudo dnf install gcc make
 
 # macOS
 xcode-select --install
-```
 
-#### ❌ `data/ directory not found`
+</details> <details> <summary><strong>❌ data/ directory not found</strong></summary>
 
-**Problem:** The `data/` folder is missing or not in the correct location.
+Problem: Exercise data folder is missing.
 
-**Solution:** Ensure `data/` is in the same directory as the `piscine-simulator` binary:
-```bash
+Solution: Ensure data/ is in the same directory as the binary.
+bash
+
 ls -la data/
-# Should show: exam00/ exam01/ exam02/ exam03/
-```
+# Should show: exam00/  exam01/  exam02/  exam03/  banner.png
 
-#### ❌ `Permission denied: ./piscine-simulator`
+</details> <details> <summary><strong>❌ Permission denied: ./piscine-simulator</strong></summary>
 
-**Solution:**
-```bash
+Solution:
+bash
+
 chmod +x ./piscine-simulator
 ./piscine-simulator
-```
 
-#### ⚠️ `Warning: no .c files found in rendu/...`
+</details> <details> <summary><strong>⚠️ No .c files found in rendu/...</strong></summary>
 
-**Problem:** You haven't created the source file yet, or it's in the wrong place.
+Problem: You haven't created the source file yet.
 
-**Solution:**
-```bash
-# Make sure your file is inside the correct rendu/ subdirectory
+Solution: Make sure your file is in the correct rendu/ subdirectory.
+bash
+
 ls rendu/<exercise_name>/
 # Should show: <exercise_name>.c
-```
 
-#### ❌ Compilation fails with `-Werror`
+</details> <details> <summary><strong>❌ Compilation fails with -Werror</strong></summary>
 
-**Problem:** Your code has warnings that are treated as errors.
+Problem: Your code has warnings treated as errors.
 
-**Solution:** Fix all warnings. This is intentional — the real 42 exam uses the same strict flags.
+Solution: Fix all warnings. This is intentional—the real 42 exam uses strict flags.
+bash
 
-<br>
+# Check for warnings
+cc -Wall -Wextra ./rendu/<exercise>/*.c -o /tmp/test
 
----
+# Common issues:
+# - Unused variables
+# - Implicit function declarations
+# - Type mismatches
 
-<br>
+</details>
+📝 Important Notes
 
-## 📝 Notes
+    ⚠️ Before you start:
 
-> ⚠️ **Important reminders before you start:**
+    📂 Keep data/ with binary — The simulator finds exercises relative to its location
+    📁 Solutions go in rendu/ only — Never place .c files outside the rendu structure
+    📄 trace/ is for debugging — Check here when compilation fails
+    🎲 No repeats in session — Simulator remembers which exercises you've seen
+    ⏱️ Timer runs continuously — Exam ends automatically when time is up
+    🚫 Not official — This is educational practice only, not affiliated with 42/1337
+    💾 Backup your work — Use Git to save your solutions
 
-1. 📂 **Keep `data/` next to the binary** — The simulator looks for exercise subjects relative to its executable location.
+🤝 Contributing
 
-2. 📁 **Solutions go ONLY in `rendu/`** — Never place your `.c` files outside the `rendu/<exercise_name>/` directory.
+Contributions are welcome! Here's how to contribute:
+bash
 
-3. 📄 **`trace/` is for debugging** — Check this folder when compilation fails to see the exact error messages.
+# 1. Fork the repository
+# 2. Create a feature branch
+git checkout -b feature/awesome-feature
 
-4. 🎲 **No repeats in one session** — The simulator remembers which exercises you've already seen and won't give them to you again until you restart.
+# 3. Make your changes
+vim src/your_file.c
 
-5. ⏱️ **Timer is real** — The exam timer runs continuously. If time runs out, the exam ends automatically.
+# 4. Commit with a clear message
+git commit -m "Add awesome feature"
 
-6. 🚫 **Not an official tool** — This is a **practice simulator** for educational purposes. It is not affiliated with, endorsed by, or connected to 42 / 1337 in any official capacity.
+# 5. Push to your fork
+git push origin feature/awesome-feature
 
-7. 💾 **Save your work** — The simulator does not back up your `rendu/` folder. Use `git` or copy your solutions if you want to keep them.
+# 6. Open a Pull Request
 
-<br>
+Ideas for Contributions
 
----
+    🌍 Add more exercises to data/
+    🎨 Improve terminal UI/banners
+    🐛 Bug fixes
+    📖 Better documentation
+    🧪 More unit tests
+    🖥️ Support for other platforms
 
-<br>
+📜 License
 
-## 🤝 Contributing
+This project is released under the MIT License.
+Code
 
-Contributions are welcome! If you'd like to improve the simulator:
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. ✍️ Commit your changes (`git commit -m 'Add amazing feature'`)
-4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
-5. 🔁 Open a Pull Request
-
-### Ideas for Contributions
-
-- 🌍 Add more exercise subjects
-- 🎨 Improve terminal UI / banners
-- 🐛 Fix bugs or edge cases
-- 📖 Improve documentation
-- 🧪 Add more unit tests
-- 🖥️ Add support for additional platforms
-
-<br>
-
----
-
-<br>
-
-## 📜 License
-
-This project is released under the **MIT License**.
-
-```
 MIT License
 
 Copyright (c) 2026 Piscine Simulator Contributors
@@ -693,39 +521,24 @@ copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-<br>
-
----
-
-<br>
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 <div align="center">
+📊 Repository Stats
 
-<pre>
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                                                                               ║
-║              🏊  READY TO DIVE IN?  🏊                                        ║
-║                                                                               ║
-║                    make && ./piscine-simulator                                ║
-║                                                                               ║
-╚═══════════════════════════════════════════════════════════════════════════════╝
-</pre>
+![GitHub Stars](https://img.shields.io/github/stars/certus-sec/piscine-simulator?style=for-the-badge&label=⭐%20Stars&labelColor=0d0d0d&color=00d4ff) ![GitHub Forks](https://img.shields.io/github/forks/certus-sec/piscine-simulator?style=for-the-badge&label=⎇%20Forks&labelColor=0d0d0d&color=00d4ff) ![Last Commit](https://img.shields.io/github/last-commit/certus-sec/piscine-simulator?style=for-the-badge&label=↑%20Pushed&labelColor=0d0d0d&color=00d4ff&logo=git) ![Repo Size](https://img.shields.io/github/repo-size/certus-sec/piscine-simulator?style=for-the-badge&label=◆%20Size&labelColor=0d0d0d&color=00d4ff)
+<p align="center"> <a href="https://github.com/certus-sec"> <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&duration=4000&pause=1000&color=00d4ff&center=true&vCenter=true&width=600&lines=Built+with+💙+C%2C+Make%2C+and+Terminal+magic;Ready+to+practice+like+a+pro%3F" alt="Call to action" /> </a> </p>
+🚀 Next Steps
+bash
 
-<br>
+# Clone this repository
+git clone https://github.com/certus-sec/piscine-simulator.git
+cd piscine-simulator
 
-**Built with** 💙 **C, Make, and a terminal-first workflow.**
+# Build the simulator
+make
 
-*Not an official 42 / 1337 tool — for educational practice only.*
+# Start practicing!
+./piscine-simulator
 
-<br>
-
-⭐ **Star this repo if it helped you practice!** ⭐
-
-</div>
+<p align="center"> <strong>⭐ If this helped you prepare, please star the repo! ⭐</strong> </p> <img src ="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,100:00d4ff&height=100&section=footer&fontColor=ffffff&animation=fadeIn" width="100%"/> </div> ```
