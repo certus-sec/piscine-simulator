@@ -14,10 +14,10 @@ t_session *session_new(void)
     session->start_time = 0;
     session->exam_end_time = 0;
     session->time_remaining = 0;
+    session->grademe_count = 0;
+    session->penalty_seconds = 60;
     return session;
 }
-
-
 
 int session_start_exam(t_session *session, int exam_id)
 {
@@ -39,12 +39,10 @@ int session_start_exam(t_session *session, int exam_id)
         session->exam = NULL;
         return -1;
     }
-
     duration = config_get_exam_duration(exam_id);
     session->start_time = time(NULL);
     session->exam_end_time = session->start_time + duration;
     session->time_remaining = duration;
-
     session->state = SESSION_EXAM_IN_PROGRESS;
     return 0;
 }
@@ -77,7 +75,6 @@ void session_display_time(const t_session *session)
     hours = remaining / 3600;
     minutes = (remaining % 3600) / 60;
     seconds = remaining % 60;
-
     printf("Time remaining: %02d:%02d:%02d\n", hours, minutes, seconds);
 }
 
@@ -86,7 +83,10 @@ void session_destroy(t_session *session)
     if (!session)
         return;
     if (session->exam)
+    {
         exam_destroy(session->exam);
+        session->exam = NULL;
+    }
     xfree((void **)&session);
 }
 

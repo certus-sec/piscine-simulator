@@ -4,6 +4,7 @@
 #include <time.h>
 #include "exam.h"
 #include "utils.h"
+
 typedef enum e_grade {
     GRADE_FAIL = 0,
     GRADE_PASS = 1
@@ -26,6 +27,8 @@ typedef struct s_session {
     time_t          start_time;
     time_t          exam_end_time;
     int             time_remaining;
+    int             grademe_count;
+    int             penalty_seconds;
 } t_session;
 
 t_session   *session_new(void);

@@ -4,10 +4,23 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define CLEAR             "\033[2J\033[H"
+#define RED               "\033[1;31m"
+#define GREEN             "\033[1;32m"
+#define YELLOW            "\033[1;33m"
+#define BLUE              "\033[1;34m"
+#define CYAN              "\033[1;36m"
+#define WHITE             "\033[1;37m"
+#define RESET             "\033[0m"
+#define PENALTY_BASE      60
+#define PENALTY_INCREMENT 300
+#define MAX_PENALTY       1800
+
 static void runner_run_exam(t_session *session, int exam_id);
 static void runner_run_level(t_session *session);
-static t_grade runner_get_grade(t_exercise *ex);
+static t_grade runner_get_grade(t_session *session, t_exercise *ex);
 static int runner_check_time(t_session *session);
+static void apply_grademe_penalty(t_session *session);
 
 void runner_start(t_session *session, int start_exam)
 {
@@ -20,8 +33,6 @@ void runner_start(t_session *session, int start_exam)
         if (session->state == SESSION_ALL_PASSED)
             break;
         if (session->state == SESSION_EXAM_FAILED)
-            break;
-        if (session->state == SESSION_EXAM_FAILED && session_is_time_up(session))
             break;
         exam_id++;
     }
@@ -49,12 +60,86 @@ static int runner_check_time(t_session *session)
 {
     if (session_is_time_up(session))
     {
-        printf("\n>>> TIME IS UP! <<<\n");
+        printf(CLEAR);
+        printf(RED "\n╔══════════════════════════════════════╗\n");
+        printf("║         ⏰  TIME IS UP!  ⏰          ║\n");
+        printf("╚══════════════════════════════════════╝\n" RESET);
         session->exam->status = EXAM_FAILED;
         session->state = SESSION_EXAM_FAILED;
         return (1);
     }
     return (0);
+}
+
+static void apply_grademe_penalty(t_session *session)
+{
+    int wait_time;
+    int i;
+
+    wait_time = session->penalty_seconds;
+    if (wait_time > MAX_PENALTY)
+        wait_time = MAX_PENALTY;
+
+    printf(YELLOW "\n╔══════════════════════════════════════╗\n");
+    printf("║     ⏳ GRADEME PENALTY ⏳            ║\n");
+    printf("║                                      ║\n");
+    printf("║  Attempt: %-3d                        ║\n", session->grademe_count + 1);
+    printf("║  Wait:   %02d:%02d                       ║\n", wait_time / 60, wait_time % 60);
+    printf("╚══════════════════════════════════════╝\n " RESET);
+
+    printf("\nWaiting");
+    for (i = 0; i < wait_time; i++)
+    {
+        if (i % 5 == 0)
+            printf(".");
+        fflush(stdout);
+        sleep(1);
+    }
+    printf("\n\n");
+
+    session->grademe_count++;
+    session->penalty_seconds += PENALTY_INCREMENT;
+}
+
+static void print_header(t_session *session, t_level *lvl, t_exercise *ex)
+{
+    int remaining;
+    int h, m, s;
+
+    remaining = session_time_remaining(session);
+    h = remaining / 3600;
+    m = (remaining % 3600) / 60;
+    s = remaining % 60;
+
+    printf(CLEAR);
+    printf(CYAN "╔══════════════════════════════════════════════════════════════╗\n");
+    printf("║" YELLOW "           PISCINE SIMULATOR — EXAM 0%d" CYAN "                     ║\n", session->exam->exam_id);
+    printf("╠══════════════════════════════════════════════════════════════╣\n");
+    printf("║  Level: %-2d / %-2d  │  Exercise: %-20s              ║\n", lvl->level_num, session->exam->level_count, ex->name);
+    printf("║  Score: %3d / %3d  │  Time: %02d:%02d:%02d                              ║\n", session->total_score, session->target_score, h, m, s);
+    printf("╚══════════════════════════════════════════════════════════════╝\n" RESET);
+    printf("\n");
+}
+
+static void print_subject(const char *content)
+{
+    printf(WHITE "┌─────────────────────────────────────────────────────────────┐\n");
+    printf("│                        SUBJECT                               │\n");
+    printf("├─────────────────────────────────────────────────────────────┤\n");
+    printf("| %s               						  |\n", content);
+    printf("└─────────────────────────────────────────────────────────────┘\n" RESET);
+    printf("\n");
+}
+
+static void print_commands(void)
+{
+    printf(GREEN "┌─────────────────────────────────────────────────────────────┐\n");
+    printf("│  Commands:                                                  │\n");
+    printf("│    test    — Compile and check for errors                   │\n");
+    printf("│    gradme  — Submit your solution (with penalty)            │\n");
+    printf("│    exit    — Quit the simulator                             │\n");
+    printf("└─────────────────────────────────────────────────────────────┘\n" RESET);
+    printf("\n");
 }
 
 static void runner_run_level(t_session *session)
@@ -72,37 +157,23 @@ static void runner_run_level(t_session *session)
         return ;
     }
 
-    display_clear();
-    banner_exam(session->exam->exam_id);
-    banner_level(lvl->level_num);
-    session_display_time(session);
-    display_exercise(ex);
+    print_header(session, lvl, ex);
 
-    grade = runner_get_grade(ex);
+    grade = runner_get_grade(session, ex);
     session_grade_exercise(session, grade);
 
     if (grade == GRADE_PASS)
     {
-        banner_pass();
-
-        printf("Exercise  : %s\n", ex->name);
-        printf("Level     : %d\n", lvl->level_num);
-        printf("Score     : %d / %d\n",
-            session->total_score,
-            session->target_score);
-
-        session_display_time(session);
-
-        printf("\n>>> Moving to next challenge...\n\n");
+        printf(GREEN "\n╔══════════════════════════════════════╗\n");
+        printf("║        ✅  LEVEL PASSED  ✅          ║\n");
+        printf("╚══════════════════════════════════════╝\n" RESET);
         sleep(1);
     }
     else
     {
-        banner_fail();
-        printf("Score  : %d / %d\n",
-            session->total_score,
-            session->target_score);
-        session_display_time(session);
+        printf(RED "\n╔══════════════════════════════════════╗\n");
+        printf("║        ❌  LEVEL FAILED  ❌          ║\n");
+        printf("╚══════════════════════════════════════╝\n" RESET);
         sleep(1);
     }
 }
@@ -159,7 +230,7 @@ static void run_correction(const char *ex_name, const char *trace_path)
     system(cmd);
 }
 
-static t_grade runner_get_grade(t_exercise *ex)
+static t_grade runner_get_grade(t_session *session, t_exercise *ex)
 {
     char  *content;
     char  input[64];
@@ -177,18 +248,16 @@ static t_grade runner_get_grade(t_exercise *ex)
     content = file_read(ex->subject_path);
     if (content)
     {
-        printf("\n===== SUBJECT =====\n");
-        printf("%s", content);
-        printf("===================\n\n");
+        print_subject(content);
         xfree((void **)&content);
     }
 
-    printf("Put your code in: ./rendu/%s/\n", ex_name);
-    printf("Commands: test | submit | exit\n\n");
+    printf(YELLOW "Put your code in: ./rendu/%s/\n\n" RESET, ex_name);
+    print_commands();
 
     while (1)
     {
-        printf("> ");
+        printf(CYAN "> " RESET);
         if (!fgets(input, sizeof(input), stdin))
             break ;
 
@@ -203,26 +272,28 @@ static t_grade runner_get_grade(t_exercise *ex)
         {
             run_correction(ex_name, trace_path);
             if (trace_is_empty(trace_path))
-                printf("\n>>> OK: Compilation successful <<<\n\n");
+                printf(GREEN "\n>>> ✅ Compilation successful <<<\n\n" RESET);
             else
-                printf("\n>>> KO: Compilation failed <<<\n");
+                printf(RED "\n>>> ❌ Compilation failed <<<\n" RESET);
         }
-        else if (ft_strcmp(input, "submit") == 0)
+        else if (ft_strcmp(input, "gradme") == 0)
         {
+            apply_grademe_penalty(session);
+            
             run_correction(ex_name, trace_path);
             if (trace_is_empty(trace_path))
             {
-                printf("\n>>> PASSED <<<\n\n");
+                printf(GREEN "\n>>> ✅ PASSED <<<\n\n" RESET);
                 return (GRADE_PASS);
             }
             else
             {
-                printf("\n>>> FAILED <<<\n");
+                printf(RED "\n>>> ❌ FAILED <<<\n" RESET);
                 return (GRADE_FAIL);
             }
         }
         else
-            printf("Unknown command. Use: test | submit | exit\n");
+            printf("Unknown command. Use: test | gradme | exit\n");
     }
     return (GRADE_FAIL);
 }
