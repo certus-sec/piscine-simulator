@@ -66,8 +66,9 @@ make
 ## 📸 Preview
 
 <p align="center">
-  <img src="https://github.com/certus-sec/piscine-simulator/blob/main/data/banner.png" width="420" />
+  <img src="https://github.com/certus-sec/piscine-simulator/blob/main/data/banner.png" width="500" />
 </p>
+
 ---
 
 ## ⚡ Requirements
