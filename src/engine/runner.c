@@ -227,33 +227,145 @@ static int safe_mkdir(const char *path)
     return mkdir(path, 0755);
 }
 
+static void run_test_case(const char *binary_path, const char *input, 
+                         const char *expected, const char *description,
+                         char *output_buffer, size_t buffer_size, int *passed)
+{
+    FILE *fp;
+    char cmd[512];
+    char result[512];
+    char buffer[1024];
+    int remaining;
+
+    if (!binary_path || !expected || !description || !output_buffer || !passed)
+        return;
+
+    if (input && strlen(input) > 0)
+        snprintf(cmd, sizeof(cmd), "echo -n '%s' | %s 2>&1", input, binary_path);
+    else
+        snprintf(cmd, sizeof(cmd), "%s 2>&1", binary_path);
+    
+    fp = popen(cmd, "r");
+    if (!fp)
+    {
+        snprintf(buffer, sizeof(buffer), RED "✗ FAIL" RESET ": %s (exec)", description);
+        remaining = buffer_size - strlen(output_buffer) - 1;
+        if (remaining > 0)
+            strncat(output_buffer, buffer, remaining);
+        return;
+    }
+
+    memset(result, 0, sizeof(result));
+    if (fgets(result, sizeof(result), fp))
+    {
+        result[strcspn(result, "\n")] = '\0';
+
+        if (strcmp(result, expected) == 0)
+        {
+            snprintf(buffer, sizeof(buffer), 
+                GREEN "✓ PASS" RESET ": %s\n", description);
+            (*passed)++;
+        }
+        else
+        {
+            snprintf(buffer, sizeof(buffer),
+                RED "✗ FAIL" RESET ": %s\n  Expected: '%s'\n  Got: '%s'\n",
+                description, expected, result);
+        }
+    }
+    else
+    {
+        snprintf(buffer, sizeof(buffer),
+            RED "✗ FAIL" RESET ": %s (no output)\n", description);
+    }
+
+    pclose(fp);
+    
+    remaining = buffer_size - strlen(output_buffer) - 1;
+    if (remaining > 0)
+        strncat(output_buffer, buffer, remaining);
+}
+
 static int run_grading(const char *ex_name)
 {
     t_grader_result *result;
-    char rendu_dir[256];
+    char rendu_dir[128];
+    char compile_cmd[512];
+    char test_output[2048];
+    char binary[128];
+    int passed_tests = 0;
+    int total_tests = 0;
 
     if (!ex_name)
         return (-1);
 
     snprintf(rendu_dir, sizeof(rendu_dir), "./rendu/%s", ex_name);
+    snprintf(binary, sizeof(binary), "/tmp/%s_exe", ex_name);
     safe_mkdir("./trace");
 
     result = grader_result_new();
     if (!result)
         return (-1);
 
-    if (grader_compile(ex_name, rendu_dir, result) < 0)
+    snprintf(compile_cmd, sizeof(compile_cmd), 
+        "cc -Wall -Wextra -Werror %s/*.c -o %s 2>/dev/null",
+        rendu_dir, binary);
+    
+    if (system(compile_cmd) != 0)
     {
+        grader_result_set_error(result, "Compilation failed");
+        grader_result_add_check(result, 0, "Compilation: FAILED");
         grader_print_report(result, ex_name);
         grader_result_destroy(result);
         return (-1);
     }
 
-    grader_result_add_check(result, 1, "Code compiled successfully");
+    grader_result_add_check(result, 1, "Compilation: SUCCESS");
+
+    memset(test_output, 0, sizeof(test_output));
+    passed_tests = 0;
+
+    if (strcmp(ex_name, "hello") == 0)
+    {
+        total_tests = 1;
+        run_test_case(binary, "", "Hello World!", 
+            "Test: hello displays correct output", 
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else if (strcmp(ex_name, "aff_z") == 0)
+    {
+        total_tests = 3;
+        run_test_case(binary, "zoo", "z", 
+            "Test 1: 'zoo'", 
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "abc", "", 
+            "Test 2: 'abc'", 
+            test_output, sizeof(test_output), &passed_tests);
+        run_test_case(binary, "ZZZZ", "", 
+            "Test 3: 'ZZZZ'", 
+            test_output, sizeof(test_output), &passed_tests);
+    }
+    else
+    {
+        total_tests = 1;
+        grader_result_add_check(result, 1, "Code compiles");
+    }
+
+    if (total_tests > 0)
+    {
+        if (passed_tests == total_tests)
+            grader_result_add_check(result, 1, "All tests passed");
+        else
+            grader_result_add_check(result, 0, "Some tests failed");
+
+        printf(CYAN "\n--- Test Results ---\n" RESET);
+        printf("%s\n", test_output);
+    }
+
     grader_print_report(result, ex_name);
     grader_result_destroy(result);
 
-    return (0);
+    return (passed_tests == total_tests && total_tests > 0 ? 0 : -1);
 }
 
 static t_grade runner_get_grade(t_session *session, t_exercise *ex)
@@ -297,22 +409,23 @@ static t_grade runner_get_grade(t_session *session, t_exercise *ex)
         else if (ft_strcmp(input, "test") == 0)
         {
             if (run_grading(ex_name) == 0)
-                printf(GREEN "\n>>> Test mode: Ready for submission <<<\n\n" RESET);
+                printf(GREEN "\n>>> Ready for submission <<<\n\n" RESET);
             else
-                printf(RED "\n>>> Test mode: Fix compilation errors <<<\n\n" RESET);
+                printf(RED "\n>>> Fix your code <<<\n\n" RESET);
         }
         else if (ft_strcmp(input, "gradme") == 0)
         {
-            apply_grademe_penalty(session);
-
-            if (run_grading(ex_name) == 0)
+            int test_result = run_grading(ex_name);
+            
+            if (test_result == 0)
             {
                 printf(GREEN "\n>>> PASSED <<<\n\n" RESET);
                 return (GRADE_PASS);
             }
             else
             {
-                printf(RED "\n>>> FAILED - fix your code and try again <<<\n" RESET);
+                apply_grademe_penalty(session);
+                printf(RED "\n>>> FAILED - Try again <<<\n\n" RESET);
             }
         }
         else
