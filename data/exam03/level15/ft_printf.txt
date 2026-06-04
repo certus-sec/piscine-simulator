@@ -1,0 +1,10 @@
+Assignment name  : ft_printf
+Expected files   : ft_printf.c
+Allowed functions: malloc, free, write, va_start, va_arg, va_end, va_copy
+--------------------------------------------------------------------------------
+
+Write a function that reproduces the behavior of printf, handling the following
+conversions: s, d, x.
+
+Your function must be declared as follows:
+int ft_printf(const char *format, ...);

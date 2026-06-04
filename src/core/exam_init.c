@@ -40,9 +40,8 @@ static int exam_load_levels(t_exam *exam)
             xfree((void **)&exam_path);
             return -1;
         }
-        exam->levels[i] = *lvl;
-        memset(lvl->exercises, 0, sizeof(lvl->exercises));
-        level_free(lvl);
+	exam->levels[i] = *lvl;
+	xfree((void **)&lvl);
     }
     xfree((void **)&exam_path);
     return 0;

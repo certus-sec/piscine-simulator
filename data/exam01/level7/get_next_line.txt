@@ -1,0 +1,16 @@
+Assignment name  : get_next_line
+Expected files   : get_next_line.c get_next_line.h
+Allowed functions: read, malloc, free
+--------------------------------------------------------------------------------
+
+Write a function that returns a line read from a file descriptor.
+
+Your function must be declared as follows:
+char *get_next_line(int fd);
+
+- Calling the function in a loop will allow to read the text file
+  pointed to by the file descriptor, one line at a time until the EOF.
+- The function should return the line that was read. If there is
+  nothing else to read or if an error occurred, it should return NULL.
+- Each line returned should include the terminating \n character,
+  except if the end of file is reached and does not end with a \n character.

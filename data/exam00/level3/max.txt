@@ -1,0 +1,10 @@
+Assignment name  : max
+Expected files   : max.c
+Allowed functions: None
+--------------------------------------------------------------------------------
+
+Write the following function:
+int  max(int* tab, unsigned int len);
+
+It must return the largest number found in the array of integers tab of length
+len. If len is equal to 0, the function must return 0.

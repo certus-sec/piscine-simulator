@@ -1,0 +1,15 @@
+Assignment name  : ft_list_push_front
+Expected files   : ft_list_push_front.c
+Allowed functions: malloc
+--------------------------------------------------------------------------------
+
+Write a function that adds a new element at the beginning of a linked list.
+
+typedef struct  s_list
+{
+    struct s_list   *next;
+    void            *data;
+}               t_list;
+
+Your function must be declared as follows:
+void ft_list_push_front(t_list **begin_list, void *data);

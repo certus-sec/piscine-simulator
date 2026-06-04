@@ -1,0 +1,15 @@
+Assignment name  : do_op
+Expected files   : do_op.c
+Allowed functions: write, printf, atoi
+--------------------------------------------------------------------------------
+
+Write a program which takes 3 arguments: two integers and an operator (among
++, -, *, /, %), and displays the result of the operation, followed by a newline.
+
+Example:
+$> ./do_op 1 + 1
+2
+$> ./do_op 10 / 3
+3
+$> ./do_op 10 % 3
+1

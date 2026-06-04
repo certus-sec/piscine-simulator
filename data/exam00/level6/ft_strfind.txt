@@ -1,0 +1,10 @@
+Assignment name  : ft_strfind
+Expected files   : ft_strfind.c
+Allowed functions: None
+--------------------------------------------------------------------------------
+
+Write a function that finds the first occurrence of the string little in the
+string big, and returns a pointer to it. If little isn't found, return NULL.
+
+Your function must be declared as follows:
+char *ft_strfind(const char *big, const char *little);

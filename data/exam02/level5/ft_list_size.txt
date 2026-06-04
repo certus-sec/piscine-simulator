@@ -1,0 +1,16 @@
+Assignment name  : ft_list_size
+Expected files   : ft_list_size.c
+Allowed functions: None
+--------------------------------------------------------------------------------
+
+Write a function that returns the number of elements in a linked list.
+
+The function must use the following structure:
+typedef struct   s_list
+{
+    struct s_list    *next;
+    void             *data;
+}                t_list;
+
+Your function must be declared as follows:
+int  ft_list_size(t_list *begin_list);

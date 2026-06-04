@@ -1,0 +1,16 @@
+Assignment name  : repeat_alpha
+Expected files   : repeat_alpha.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes a string and displays it, replacing each alphabetical
+character by the same character repeated a number of times corresponding to its
+position in the alphabet (a=1, b=2, ..., z=26), followed by a newline.
+
+Example:
+$> ./repeat_alpha "abc"
+abbccc
+$> ./repeat_alpha "Hello"
+HHHHHHHHeeeeeeeeeeeeeelllllllllllllllllllllllllllllllllllllllloooooooooooooooooooooooooooooooo
+$> ./repeat_alpha
+$>

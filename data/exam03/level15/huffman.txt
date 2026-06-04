@@ -1,0 +1,11 @@
+Assignment name  : huffman
+Expected files   : huffman.c
+Allowed functions: malloc, free, printf, qsort
+--------------------------------------------------------------------------------
+
+Write a program that takes strings as arguments and displays the Huffman codes
+for each of the characters in those strings, with each code on its own line,
+in the following format:
+<character> : <huffman code>
+
+The characters should be displayed in ascending order.

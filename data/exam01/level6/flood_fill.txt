@@ -1,0 +1,18 @@
+Assignment name  : flood_fill
+Expected files   : flood_fill.c
+Allowed functions: None
+--------------------------------------------------------------------------------
+
+Write a function that takes a char ** as a 2D array of char, a t_point as the
+dimensions of this 2D array, and a t_point as the starting point.
+Starting from the given 'starting point', this function fills the zone
+by replacing characters having the same value as the starting point with 'F'.
+
+typedef struct  s_point
+{
+    int     x;
+    int     y;
+}               t_point;
+
+Your function must be declared as follows:
+void    flood_fill(char **tab, t_point size, t_point begin);

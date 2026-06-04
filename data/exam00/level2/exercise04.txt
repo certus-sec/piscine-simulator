@@ -1,8 +1,0 @@
-Assignment name  : ft_putchar
-Expected files   : ft_putchar.c
-Allowed functions: write
-
-Write a function that displays the character passed as a parameter.
-
-It will be prototyped as follows:
-void	ft_putchar(char c);

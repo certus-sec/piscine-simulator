@@ -1,0 +1,11 @@
+Assignment name  : ft_split
+Expected files   : ft_split.c
+Allowed functions: malloc, free
+--------------------------------------------------------------------------------
+
+Write a function ft_split that, given a string and a separator character,
+splits the string according to the separator and returns the result as an
+array of strings (null terminated).
+
+Your function must be declared as follows:
+char **ft_split(char *str, char sep);

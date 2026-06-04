@@ -1,0 +1,14 @@
+Assignment name  : pgcd
+Expected files   : pgcd.c
+Allowed functions: printf, atoi
+--------------------------------------------------------------------------------
+
+Write a program that displays the greatest common divisor of two numbers
+given as arguments, followed by a newline. If the number of arguments is not
+2, or if the arguments aren't valid numbers, display 0 followed by a newline.
+
+Example:
+$> ./pgcd 42 10
+2
+$> ./pgcd 42 12
+6

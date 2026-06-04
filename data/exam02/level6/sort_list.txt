@@ -1,0 +1,16 @@
+Assignment name  : sort_list
+Expected files   : sort_list.c
+Allowed functions: malloc, free
+--------------------------------------------------------------------------------
+
+Write a function that sorts a linked list of integers in ascending order using
+the selection sort algorithm.
+
+typedef struct  s_list
+{
+    struct s_list   *next;
+    void            *data;
+}               t_list;
+
+Your function must be declared as follows:
+void sort_list(t_list **begin_list, int (*cmp)(void *, void *));

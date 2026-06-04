@@ -1,0 +1,13 @@
+Assignment name  : aff_last_param
+Expected files   : aff_last_param.c
+Allowed functions: write
+--------------------------------------------------------------------------------
+
+Write a program that takes several strings and displays the last argument,
+followed by a newline. If there are no arguments, don't display anything.
+
+Example:
+$> ./aff_last_param hello world
+world
+$> ./aff_last_param
+$>
