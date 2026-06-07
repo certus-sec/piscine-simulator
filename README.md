@@ -1,16 +1,16 @@
 <div align="center">
 
-[![capsule](https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:1e3a5f,100:0D4AA&height=200&section=header&text=Piscine%20Simulator&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Train%20Under%20Real%2042%20%2F%201337%20Exam%20Conditions&descAlignY=58&descSize=18&animation=fadeIn)](https://github.com/certus-sec/piscine-simulator)
+[![capsule](https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:1e3a5f,100:0D4AA&height=200&section=header&text=Examshell42%20&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Train%20Under%20Real%2042%20%2F%201337%20Exam%20Conditions&descAlignY=58&descSize=18&animation=fadeIn)](https://github.com/certus-sec/Examshell42)
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=22&duration=3000&pause=1000&color=00D4AA&center=true&vCenter=true&width=600&lines=Terminal-based+Exam+Simulator;Built+in+Pure+C+%7C+Zero+Dependencies;240%2B+Exercises+Across+4+Exams;Practice.+Fail.+Learn.+Repeat.)](https://github.com/certus-sec/piscine-simulator)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=22&duration=3000&pause=1000&color=00D4AA&center=true&vCenter=true&width=600&lines=Terminal-based+Examshell;Built+in+Pure+C+%7C+Zero+Dependencies;240%2B+Exercises+Across+4+Exams;Practice.+Fail.+Learn.+Repeat.)](https://github.com/certus-sec/Examshell42)
 
 <br/>
 
-[![Language](https://img.shields.io/badge/Language-C-00599C?style=for-the-badge&logo=c&logoColor=white)](https://github.com/certus-sec/piscine-simulator)
-[![Build](https://img.shields.io/badge/Build-Makefile-427819?style=for-the-badge&logo=gnu&logoColor=white)](https://github.com/certus-sec/piscine-simulator)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-8b5cf6?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/certus-sec/piscine-simulator)
-[![Dependencies](https://img.shields.io/badge/Dependencies-None-f59e0b?style=for-the-badge)](https://github.com/certus-sec/piscine-simulator)
-[![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](https://github.com/certus-sec/piscine-simulator/blob/main/LICENSE)
+[![Language](https://img.shields.io/badge/Language-C-00599C?style=for-the-badge&logo=c&logoColor=white)](https://github.com/certus-sec/Examshell42)
+[![Build](https://img.shields.io/badge/Build-Makefile-427819?style=for-the-badge&logo=gnu&logoColor=white)](https://github.com/certus-sec/Examshell42)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-8b5cf6?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/certus-sec/Examshell42)
+[![Dependencies](https://img.shields.io/badge/Dependencies-None-f59e0b?style=for-the-badge)](https://github.com/certus-sec/Examshell42)
+[![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](https://github.com/certus-sec/Examshell42/blob/main/LICENSE)
 
 </div>
 
@@ -35,7 +35,7 @@
 
 ## 🎯 Overview
 
-**Piscine Simulator** replicates the authentic **1337 / 42** Piscine exam environment, letting students practice under real exam conditions — timed sessions, grademe penalties, molinette feedback, and auto progression.
+**Examshell42** replicates the authentic **1337 / 42** Piscine exam environment, letting students practice under real exam conditions — timed sessions, grademe penalties, molinette feedback, and auto progression.
 
 ```
   Exam00  ──►  Exam01  ──►  Exam02  ──►  Exam03
@@ -47,7 +47,7 @@
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/certus-sec/piscine-simulator.git
+git clone https://github.com/certus-sec/Examshell42.git
 cd piscine-simulator
 make
 ./piscine-simulator
@@ -75,7 +75,7 @@ make
 ## 📸 Preview
 
 <p align="center">
-  <img src="https://github.com/certus-sec/piscine-simulator/blob/main/data/banner.png?raw=true" width="780" alt="Piscine Simulator Preview"/>
+  <img src="https://github.com/certus-sec/Examshell42/blob/main/data/banner.png?raw=true" width="780" alt="Examshell42 Preview"/>
 </p>
 
 ---
@@ -131,7 +131,7 @@ xcode-select --install
 ## 🎮 How To Use
 
 ```
-1.  Launch        →  ./piscine-simulator
+1.  Launch        →  ./Examshell42
 2.  Select Exam   →  Choose Exam00 through Exam03
 3.  Read Subject  →  Subject displayed in terminal
 4.  Write Code    →  ./rendu/<exercise_name>/
@@ -207,7 +207,7 @@ Failed : 2 / 3
 ## 🗂️ Project Structure
 
 ```
-piscine-simulator/
+Examshell42/
 ├── 📁 src/
 │   ├── engine/        ←  Core exam runner & grading logic
 │   ├── grader/        ←  Molinette-style test system
@@ -246,7 +246,7 @@ Distributed under the **MIT License**.
 
 <div align="center">
 
-[![wave](https://capsule-render.vercel.app/api?type=waving&color=0:0D4AA,50:1e3a5f,100:0f172a&height=120&section=footer)](https://github.com/certus-sec/piscine-simulator)
+[![wave](https://capsule-render.vercel.app/api?type=waving&color=0:0D4AA,50:1e3a5f,100:0f172a&height=120&section=footer)](https://github.com/certus-sec/Examshell42)
 
 **Built for 42 / 1337 Students**
 
