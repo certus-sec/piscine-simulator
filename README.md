@@ -48,9 +48,9 @@
 
 ```bash
 git clone https://github.com/certus-sec/Examshell42.git
-cd piscine-simulator
+cd Examshell42
 make
-./piscine-simulator
+./Examshell42
 ```
 
 ---
