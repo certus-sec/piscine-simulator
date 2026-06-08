@@ -248,9 +248,7 @@ Distributed under the **MIT License**.
 
 [![wave](https://capsule-render.vercel.app/api?type=waving&color=0:0D4AA,50:1e3a5f,100:0f172a&height=120&section=footer)](https://github.com/certus-sec/Examshell42)
 
-**Built for 42 / 1337 Students**
-
-*Practice. Fail. Learn. Repeat.*
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=30&duration=3000&pause=800&color=00D4AA&center=true&vCenter=true&width=500&lines=Built+for+42+%26+1337+Students;Practice.+Fail.+Learn.+Repeat." alt="Typing SVG" />
 
 ⭐ Star the project if it helped you — it means a lot!
 
