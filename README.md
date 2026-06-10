@@ -49,7 +49,7 @@
 ```bash
 git clone https://github.com/certus-sec/Examshell42.git
 cd Examshell42
-make
+make run
 ./Examshell42
 ```
 
@@ -117,7 +117,6 @@ xcode-select --install
 
 | Command | Description |
 |:--------|:------------|
-| `make` | Build the project |
 | `make run` | Build & Run immediately |
 | `make test` | Run test suite |
 | `make clean` | Remove object files |
